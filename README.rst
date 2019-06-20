@@ -146,17 +146,19 @@ El operador ? nos muestra información sobre los objetos. Se utiliza
 añadiendo el símbolo de interrogación al final del nombre del objeto 
 del cual queremos más información. Por ejemplo:
 
+.. code-block:: nim
 
-In [3]: str?
-Type: type
-Base Class:
-String Form:
-Namespace: Python builtin
-Docstring:
-str(object) -> string
-Return a nice string representation of the object.
-If the argument is a string, the return value is the same 
-object. 
+ In [3]: str?
+ Type: type
+ Base Class:
+ String Form:
+ Namespace: Python builtin
+ Docstring:
+ str(object) -> string
+
+ Return a nice string representation of the object.
+ If the argument is a string, the return value is the same 
+ object. 
 
 En el campo de IDEs y editores de código gratuitos PyDEV *(http://
 pydev.sourceforge.net/)* se alza como cabeza de serie. PyDEV es un plu-
@@ -170,15 +172,43 @@ dad importante de memoria y no es del todo estable.
 
 Otras opciones gratuitas a considerar son SPE o Stani’s Python Editor 
 *(http://sourceforge.net/projects/spe/)* ,  Eric *(http://die-offenbachs.de/eric/)* , 
-BOA Constructor (http://boa-constructor.sourceforge.net/) o incluso 
+BOA Constructor *(http://boa-constructor.sourceforge.net/)* o incluso 
 emacs o vim.
 
-Si no te importa desembolsar algo de dinero, Komodo (http://www.
-activestate.com/komodo_ide/) y Wing IDE (http://www.wingware.com/) 
+Si no te importa desembolsar algo de dinero, Komodo *(http://www.
+activestate.com/komodo_ide/)* y Wing IDE *(http://www.wingware.com/)* 
 son también muy buenas opciones, con montones de características 
 interesantes, como PyDEV, pero mucho más estables y robustos. Ade-
 más, si desarrollas software libre no comercial puedes contactar con 
 Wing Ware y obtener, con un poco de suerte, una licencia gratuita para 
 Wing IDE Professional :)
 
+**Mi priMer prograMa en python**
+=======
+
+Como comentábamos en el capítulo anterior existen dos formas de 
+ejecutar código Python, bien en una sesión interactiva (línea a línea) 
+con el intérprete, o bien de la forma habitual, escribiendo el código en 
+un archivo de código fuente y ejecutándolo.
+El primer programa que vamos a escribir en Python es el clásico Hola 
+Mundo, y en este lenguaje es tan simple como:
+
+.. code-block:: nim
+
+ print “Hola Mundo”
+
+Vamos a probarlo primero en el intérprete. Ejecuta python o ipython 
+según tus preferencias, escribe la línea anterior y pulsa Enter. El intér-
+prete responderá mostrando en la consola el texto Hola Mundo.
+Vamos ahora a crear un archivo de texto con el código anterior, de 
+forma que pudiéramos distribuir nuestro pequeño gran programa entre 
+nuestros amigos. Abre tu editor de texto preferido o bien el IDE que 
+hayas elegido y copia la línea anterior. Guárdalo como hola.py, por 
+ejemplo.
+Ejecutar este programa es tan sencillo como indicarle el nombre del 
+archivo a ejecutar al intérprete de Python
+
+.. code-block:: nim
+
+ python hola.py
 
