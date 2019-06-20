@@ -4,7 +4,7 @@
 .. image:: https://github.com/catetita/pyton-en-espanol/blob/master/1_PXHkfdYyliqb1qCrznu5TQ.jpeg
 
 
-**introduCCión**
+**Introducción**
 -------
 **¿Qué es Python?**
 
@@ -101,3 +101,62 @@ ciones Linux y en las últimas versiones de Mac OS. Para comprobar si
 está instalado abre una terminal y escribe python. Si está instalado se 
 iniciará la consola interactiva de Python y obtendremos parecido a lo 
 siguiente:
+
+.. code-block:: nim
+
+ Python 2.5.1 (r251:54863, May 2 2007, 16:56:35)
+ [GCC 4.1.2 (Ubuntu 4.1.2-0ubuntu4)] on linux2
+ Type “help”, “copyright”, “credits” or “license” for more 
+ information.
+ >>> 
+
+
+La primera línea nos indica la versión de Python que tenemos ins-
+talada. Al final podemos ver el prompt (>>>) que nos indica que el 
+intérprete está esperando código del usuario. Podemos salir escribiendo 
+exit(), o pulsando Control + D.
+Si no te muestra algo parecido no te preocupes, instalar Python es muy 
+sencillo. Puedes descargar la versión correspondiente a tu sistema ope-
+rativo desde la web de Python, en http://www.python.org/download/. 
+Existen instaladores para Windows y Mac OS. Si utilizas Linux es 
+muy probable que puedas instalarlo usando la herramienta de gestión 
+de paquetes de tu distribución, aunque también podemos descargar la 
+aplicación compilada desde la web de Python.
+
+**Herramientas básicas**
+-----
+
+Existen dos formas de ejecutar código Python. Podemos escribir líneas 
+de código en el intérprete y obtener una respuesta del intérprete para 
+cada línea (sesión interactiva) o bien podemos escribir el código de un 
+programa en un archivo de texto y ejecutarlo.
+A la hora de realizar una sesión interactiva os aconsejo instalar y uti-
+lizar iPython, en lugar de la consola interactiva de Python. Se puede 
+encontrar en http://ipython.scipy.org/. iPython cuenta con características 
+añadidas muy interesantes, como el autocompletado o el operador ?. 
+(para activar la característica de autocompletado en Windows es nece-
+sario instalar PyReadline, que puede descargarse desde http://ipython.
+scipy.org/ moin/PyReadline/Intro)
+La función de autocompletado se lanza pulsando el tabulador. Si 
+escribimos fi y pulsamos Tab nos mostrará una lista de los objetos 
+que comienzan con fi (file, filter y finally). Si escribimos file. y 
+pulsamos Tab nos mostrará una lista de los métodos y propiedades del 
+objeto file.
+El operador ? nos muestra información sobre los objetos. Se utiliza 
+añadiendo el símbolo de interrogación al final del nombre del objeto 
+del cual queremos más información. Por ejemplo:
+
+
+ In [3]: str?
+ Type: type
+ Base Class:
+ String Form:
+ Namespace: Python builtin
+ Docstring:
+ str(object) -> string
+ Return a nice string representation of the object.
+ If the argument is a string, the return value is the same 
+ object. 
+
+
+
