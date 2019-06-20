@@ -147,16 +147,38 @@ añadiendo el símbolo de interrogación al final del nombre del objeto
 del cual queremos más información. Por ejemplo:
 
 
- In [3]: str?
- Type: type
- Base Class:
- String Form:
- Namespace: Python builtin
- Docstring:
- str(object) -> string
- Return a nice string representation of the object.
- If the argument is a string, the return value is the same 
- object. 
+In [3]: str?
+Type: type
+Base Class:
+String Form:
+Namespace: Python builtin
+Docstring:
+str(object) -> string
+Return a nice string representation of the object.
+If the argument is a string, the return value is the same 
+object. 
 
+En el campo de IDEs y editores de código gratuitos PyDEV *(http://
+pydev.sourceforge.net/)* se alza como cabeza de serie. PyDEV es un plu-
+gin para Eclipse que permite utilizar este IDE multiplataforma para 
+programar en Python. Cuenta con autocompletado de código (con 
+información sobre cada elemento), resaltado de sintaxis, un depurador 
+gráfico, resaltado de errores, explorador de clases, formateo del código, 
+refactorización, etc. Sin duda es la opción más completa, sobre todo si 
+instalamos las extensiones comerciales, aunque necesita de una canti-
+dad importante de memoria y no es del todo estable.
+
+Otras opciones gratuitas a considerar son SPE o Stani’s Python Editor 
+*(http://sourceforge.net/projects/spe/)* ,  Eric *(http://die-offenbachs.de/eric/)* , 
+BOA Constructor (http://boa-constructor.sourceforge.net/) o incluso 
+emacs o vim.
+
+Si no te importa desembolsar algo de dinero, Komodo (http://www.
+activestate.com/komodo_ide/) y Wing IDE (http://www.wingware.com/) 
+son también muy buenas opciones, con montones de características 
+interesantes, como PyDEV, pero mucho más estables y robustos. Ade-
+más, si desarrollas software libre no comercial puedes contactar con 
+Wing Ware y obtener, con un poco de suerte, una licencia gratuita para 
+Wing IDE Professional :)
 
 
