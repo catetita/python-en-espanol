@@ -442,11 +442,15 @@ forma:
 
 **Operadores**
 
+
 Veamos ahora qué podemos hacer con nuestros números usando los 
 operadores por defecto. Para operaciones más complejas podemos 
 recurrir al módulo ``math`` .
 
+
+
 **Operadores aritméticos**
+
 
 ================== =============== ================= 
 Operador             Descripción          Ejemplo
@@ -454,3 +458,95 @@ Operador             Descripción          Ejemplo
      +                SUMA         r = 3 + 2    # r es 5
      -                RESTA        r = 4 - 7    # r es -3
 ================== =============== ================= 
+
+
+
+
+============ ================  =========================
+Operador     Descripción        Ejemplo
+============ ================  =========================
+         -   Negación          r  = -7       # r es -7
+         *   Multiplicación    r = 2 * 6    # r es 12
+**           Exponente         r = 2 ** 6   # r es 64
+/            División          r = 3.5 / 2  # r es 1.75
+//           División entera   r = 3.5 // 2 # r es 1.0
+%            Módulo            r = 7 % 2    # r es 1
+============ ================ ===========================
+
+
+Puede que tengáis dudas sobre cómo funciona el operador de módulo, 
+y cuál es la diferencia entre división y división entera.
+
+El operador de módulo no hace otra cosa que devolvernos el resto de 
+la división entre los dos operandos. En el ejemplo, 7/2 sería 3, con 1 de 
+resto, luego el módulo es 1.
+
+La diferencia entre división y división entera no es otra que la que 
+indica su nombre. En la división el resultado que se devuelve es un 
+número real, mientras que en la división entera el resultado que se 
+devuelve es solo la parte entera.
+
+No obstante hay que tener en cuenta que si utilizamos dos operandos 
+enteros, Python determinará que queremos que la variable resultado 
+también sea un entero, por lo que el resultado de, por ejemplo, 3 / 2 y 
+3 // 2 sería el mismo: 1.
+
+Si quisiéramos obtener los decimales necesitaríamos que al menos uno 
+de los operandos fuera un número real, bien indicando los decimales
+
+.. code-block:: nim
+
+ r = 3.0 / 2
+
+
+o bien utilizando la función float (no es necesario que sepais lo que 
+significa el término función, ni que recordeis esta forma, lo veremos un 
+poco más adelante):
+
+.. code-block:: nim
+
+ r = float(3) / 2
+
+
+Esto es así porque cuando se mezclan tipos de números, Python con-
+vierte todos los operandos al tipo más complejo de entre los tipos de 
+los operandos.
+
+**Operadores a nivel de bit**
+
+Si no conocéis estos operadores es poco probable que vayáis a necesi-
+tarlos, por lo que podéis obviar esta parte. Si aún así tenéis curiosidad 
+os diré que estos son operadores que actúan sobre las representaciones 
+en binario de los operandos.
+
+Por ejemplo, si veis una operación como 3 & 2, lo que estais viendo es 
+un and bit a bit entre los números binarios 11 y 10 (las representacio-
+nes en binario de 3 y 2).
+
+El operador ``and`` (&), del inglés “y”, devuelve 1 si el primer bit operando 
+es 1 y el segundo bit operando es 1. Se devuelve 0 en caso contrario.
+
+El resultado de aplicar and bit a bit a 11 y 10 sería entonces el número 
+binario 10, o lo que es lo mismo, 2 en decimal (el primer dígito es 1 
+para ambas cifras, mientras que el segundo es 1 sólo para una de ellas).
+
+El operador ``or`` (|), del inglés “o”, devuelve 1 si el primer operando es 1 
+o el segundo operando es 1. Para el resto de casos se devuelve 0.
+
+El operador ``xor`` u or exclusivo (^) devuelve 1 si uno de los operandos 
+es 1 y el otro no lo es.
+
+El operador ``not`` (~), del inglés “no”, sirve para negar uno a uno cada 
+bit; es decir, si el operando es 0, cambia a 1 y si es 1, cambia a 0.
+
+Por último los operadores de desplazamiento (<< y >>) sirven para 
+desplazar los bits n posiciones hacia la izquierda o la derecha.
+
+========= ============== =====================
+Operador   Descripción     Ejemplo
+========= ============== =====================
+&             and         r = 3 & 2  # r es 2
+|             or          r = 3 | 2  # r es 3
+^             xor         r = 3 ^ 2  # r es 1
+~             not         r = ~3     # r es -4
+========= ============== ======================
