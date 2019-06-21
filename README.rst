@@ -212,3 +212,95 @@ archivo a ejecutar al intérprete de Python
 
  python hola.py
 
+pero vamos a ver cómo simplificarlo aún más.
+
+Si utilizas Windows los archivos .py ya estarán asociados al intérprete 
+de Python, por lo que basta hacer doble clic sobre el archivo para eje-
+cutar el programa. Sin embargo como este programa no hace más que 
+imprimir un texto en la consola, la ejecución es demasiado rápida para 
+poder verlo si quiera. Para remediarlo, vamos a añadir una nueva línea 
+que espere la entrada de datos por parte del usuario.
+
+.. code-block:: nim
+
+ print “Hola Mundo”
+ raw_input()
+
+
+De esta forma se mostrará una consola con el texto Hola Mundo hasta 
+que pulsemos Enter.
+
+Si utilizas Linux (u otro Unix) para conseguir este comportamiento, es 
+decir, para que el sistema operativo abra el archivo .py con el intérprete 
+adecuado, es necesario añadir una nueva línea al principio del archivo:
+
+.. code-block:: nim
+
+ #!/usr/bin/python
+ print “Hola Mundo”
+ raw_input()
+
+A esta línea se le conoce en el mundo Unix como ``shebang`` , ``hashbang`` 
+o ``sharpbang`` . El par de caracteres #! indica al sistema operativo que 
+dicho script se debe ejecutar utilizando el intérprete especificado a 
+continuación. De esto se desprende, evidentemente, que si esta no es la 
+ruta en la que está instalado nuestro intérprete de Python, es necesario 
+cambiarla.
+
+Otra opción es utilizar el programa env (de environment, entorno) 
+para preguntar al sistema por la ruta al intérprete de Python, de forma 
+que nuestros usuarios no tengan ningún problema si se diera el caso de 
+que el programa no estuviera instalado en dicha ruta:
+
+.. code-block:: nim
+
+ #!/usr/bin/env python
+ print “Hola Mundo”
+ raw_input()
+
+Por supuesto además de añadir el shebang, tendremos que dar permi-
+sos de ejecución al programa.
+
+.. code-block:: nim
+
+ chmod +x hola.py
+
+Y listo, si hacemos doble clic el programa se ejecutará, mostrando una 
+consola con el texto Hola Mundo, como en el caso de Windows.
+
+También podríamos correr el programa desde la consola como si trata-
+ra de un ejecutable cualquiera:
+
+.. code-block:: nim
+
+ ./hola.py
+
+
+En Python los tipos básicos se dividen en:
+
+* Números, como pueden ser 3 (entero), 15.57 (de coma flotante) o 
+7 + 5j (complejos)
+* Cadenas de texto, como “Hola Mundo”
+* Valores booleanos: True (cierto) y False (falso).
+  
+Vamos a crear un par de variables a modo de ejemplo. Una de tipo 
+cadena y una de tipo entero:
+
+.. code-block:: nim
+
+ # esto es una cadena
+ c = “Hola Mundo”
+ # y esto es un entero
+ e = 23
+ # podemos comprobarlo con la función type
+ type(c)
+ type(e)
+
+
+Como veis en Python, a diferencia de muchos otros lenguajes, no se 
+declara el tipo de la variable al crearla. En Java, por ejemplo, escribiría-
+mos:
+
+
+
+
