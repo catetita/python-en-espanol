@@ -462,6 +462,17 @@ Operador             Descripción          Ejemplo
 
 
 
+================== =============== ================= ==
+Operador Descripción Ejemplo
+================== =============== ================= ==
+     -              Negación           r = -7       # r es -7
+     *              Multiplicación     r = 2 * 6    # r es 12
+     * *            Exponente          r = 2 * * 6   # r es 64
+     /              División           r = 3.5 / 2  # r es 1.75
+     //             División entera    r = 3.5 // 2 # r es 1.0
+     %              Módulo             r = 7 % 2    # r es 1
+================== =============== ================= ==
+
 ==================  ================  ================= 
 Operador            Descripción        Ejemplo
 ==================  ================  ================= 
