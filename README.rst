@@ -280,7 +280,9 @@ En Python los tipos básicos se dividen en:
 
 * Números, como pueden ser 3 (entero), 15.57 (de coma flotante) o 
 7 + 5j (complejos)
+
 * Cadenas de texto, como “Hola Mundo”
+  
 * Valores booleanos: True (cierto) y False (falso).
   
 Vamos a crear un par de variables a modo de ejemplo. Una de tipo 
