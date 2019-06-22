@@ -544,15 +544,15 @@ bit; es decir, si el operando es 0, cambia a 1 y si es 1, cambia a 0.
 Por último los operadores de desplazamiento (<< y >>) sirven para 
 desplazar los bits n posiciones hacia la izquierda o la derecha.
 
-========= ================== ======================
-Operador   Descripción        Ejemplo
-========= ================== ======================
+========= =================== ======================
+Operador   Descripción         Ejemplo
+========= =================== ======================
 &             and             r = 3 & 2  # r es 2
 |             or              r = 3 | 2  # r es 3
 ^             xor             r = 3 ^ 2  # r es 1
 ~             not             r = ~3     # r es -4
 <<        Desplazamiento izq. r = 3 << 1 # r es 6
 >>        Desplazamiento der. r = 3 >> 1 # r es 1
-========= ================== ======================
+========= =================== ======================
 
 
