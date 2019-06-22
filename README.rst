@@ -990,8 +990,254 @@ o B si no se cumple: A if C else B. Veamos un ejemplo:
 .. code-block:: nim
 
  var = “par” if (num % 2 == 0) else “impar”
- 
+
 Y eso es todo. Si conocéis otros lenguajes de programación puede que 
 esperarais que os hablara ahora del switch, pero en Python no existe 
 esta construcción, que podría emularse con un simple diccionario, así 
 que pasemos directamente a los bucles.
+
+**Bucles**
+---------
+___________
+
+Mientras que los condicionales nos permiten ejecutar distintos frag-
+mentos de código dependiendo de ciertas condiciones, los bucles nos 
+permiten ejecutar un mismo fragmento de código un cierto número de 
+veces, mientras se cumpla una determinada condición.
+
+**while**
+
+El bucle while (mientras) ejecuta un fragmento de código mientras se 
+cumpla una condición.
+
+.. code-block:: nim
+
+ edad = 0
+ while edad < 18:
+    edad = edad + 1
+    print “Felicidades, tienes “ + str(edad)
+
+La variable edad comienza valiendo 0. Como la condición de que edad 
+es menor que 18 es cierta (0 es menor que 18), se entra en el bucle. 
+Se aumenta edad en 1 y se imprime el mensaje informando de que 
+el usuario ha cumplido un año. Recordad que el operador + para las 
+cadenas funciona concatenando ambas cadenas. Es necesario utilizar 
+la función str (de ``string``, cadena) para crear una cadena a partir del 
+número, dado que no podemos concatenar números y cadenas, pero ya 
+comentaremos esto y mucho más en próximos capítulos.
+
+Ahora se vuelve a evaluar la condición, y 1 sigue siendo menor que 18, 
+por lo que se vuelve a ejecutar el código que aumenta la edad en un 
+año e imprime la edad en la pantalla. El bucle continuará ejecutándose 
+hasta que edad sea igual a 18, momento en el cual la condición dejará 
+de cumplirse y el programa continuaría ejecutando las instrucciones 
+siguientes al bucle.
+
+Ahora imaginemos que se nos olvidara escribir la instrucción que 
+aumenta la edad. En ese caso nunca se llegaría a la condición de que 
+edad fuese igual o mayor que 18, siempre sería 0, y el bucle continuaría 
+indefinidamente escribiendo en pantalla Has cumplido 0.
+
+Esto es lo que se conoce como un bucle infinito.
+
+Sin embargo hay situaciones en las que un bucle infinito es útil. Por 
+ejemplo, veamos un pequeño programa que repite todo lo que el usua-
+rio diga hasta que escriba adios.
+
+.. code-block:: nim
+
+ while True:
+    entrada = raw_input(“> “)
+    if entrada == “adios”:
+        break
+    else:
+        print entrada
+
+Para obtener lo que el usuario escriba en pantalla utilizamos la función 
+raw_input. No es necesario que sepais qué es una función ni cómo 
+funciona exactamente, simplemente aceptad por ahora que en cada 
+iteración del bucle la variable entrada contendrá lo que el usuario 
+escribió hasta pulsar Enter.
+
+Comprobamos entonces si lo que escribió el usuario fue adios, en cuyo 
+caso se ejecuta la orden break o si era cualquier otra cosa, en cuyo caso 
+se imprime en pantalla lo que el usuario escribió.
+
+La palabra clave break (romper) sale del bucle en el que estamos.
+
+Este bucle se podría haber escrito también, no obstante, de la siguiente 
+forma:
+
+.. code-block:: nim
+
+ salir = False
+ while not salir:
+    entrada = raw_input()
+    if entrada == “adios”:
+        salir = True
+    else:
+        print entrada
+
+pero nos ha servido para ver cómo funciona break.
+Otra palabra clave que nos podemos encontrar dentro de los bucles es 
+continue (continuar). Como habréis adivinado no hace otra cosa que 
+pasar directamente a la siguiente iteración del bucle.
+
+.. code-block:: nim
+
+ edad = 0
+ while edad < 18:
+    edad = edad + 1
+    if edad % 2 == 0:
+        continue
+    print “Felicidades, tienes “ + str(edad)
+
+Como veis esta es una pequeña modificación de nuestro programa de 
+felicitaciones. En esta ocasión hemos añadido un if que comprueba si 
+la edad es par, en cuyo caso saltamos a la próxima iteración en lugar de 
+imprimir el mensaje. Es decir, con esta modificación el programa sólo 
+imprimiría felicitaciones cuando la edad fuera impar.
+
+**for … in**
+
+A los que hayáis tenido experiencia previa con según que lenguajes este 
+bucle os va a sorprender gratamente. En Python for se utiliza como 
+una forma genérica de iterar sobre una secuencia. Y como tal intenta 
+facilitar su uso para este fin.
+
+Este es el aspecto de un bucle for en Python:
+
+.. code-block:: nim
+
+ secuencia = [“uno”, “dos”, “tres”]
+ for elemento in secuencia:
+    print elemento
+
+Como hemos dicho los for se utilizan en Python para recorrer secuen-
+cias, por lo que vamos a utilizar un tipo secuencia, como es la lista, para 
+nuestro ejemplo.
+
+Leamos la cabecera del bucle como si de lenguaje natural se tratara: 
+“para cada elemento en secuencia”. Y esto es exactamente lo que hace 
+el bucle: para cada elemento que tengamos en la secuencia, ejecuta 
+estas líneas de código.
+
+Lo que hace la cabecera del bucle es obtener el siguiente elemento de 
+la secuencia secuencia y almacenarlo en una variable de nombre ele-
+mento. Por esta razón en la primera iteración del bucle elemento valdrá 
+“uno”, en la segunda “dos”, y en la tercera “tres”.
+
+Fácil y sencillo.
+
+En C o C++, por ejemplo, lo que habríamos hecho sería iterar sobre las 
+posiciones, y no sobre los elementos:
+
+.. code-block:: nim
+
+ int mi_array[] = {1, 2, 3, 4, 5};
+ int i;
+ for(i = 0; i < 5; i++) {
+    printf(“%d\n”, mi_array[i]);
+ }
+
+Es decir, tendríamos un bucle for que fuera aumentando una variable 
+i en cada iteración, desde 0 al tamaño de la secuencia, y utilizaríamos 
+esta variable a modo de índice para obtener cada elemento e imprimir-
+lo.
+
+Como veis el enfoque de Python es más natural e intuitivo.
+
+Pero, ¿qué ocurre si quisiéramos utilizar el for como si estuviéramos en 
+C o en Java, por ejemplo, para imprimir los números de 30 a 50? No os 
+preocupéis, porque no necesitaríais crear una lista y añadir uno a uno 
+los números del 30 al 50. Python proporciona una función llamada 
+range (rango) que permite generar una lista que vaya desde el primer 
+número que le indiquemos al segundo. Lo veremos después de ver al 
+fin a qué se refiere ese término tan recurrente: las funciones.
+
+**funCiones**
+------------
+
+Una función es un fragmento de código con un nombre asociado que 
+realiza una serie de tareas y devuelve un valor. A los fragmentos de 
+código que tienen un nombre asociado y no devuelven valores se les 
+suele llamar procedimientos. En Python no existen los procedimien-
+tos, ya que cuando el programador no especifica un valor de retorno la 
+función devuelve el valor None (nada), equivalente al null de Java.
+
+Además de ayudarnos a programar y depurar dividiendo el programa 
+en partes las funciones también permiten reutilizar código.
+
+En Python las funciones se declaran de la siguiente forma:
+
+.. code-block:: nim
+
+ def mi_funcion(param1, param2):
+    print param1
+    print param2
+
+Es decir, la palabra clave def seguida del nombre de la función y entre 
+paréntesis los argumentos separados por comas. A continuación, en 
+otra línea, indentado y después de los dos puntos tendríamos las líneas 
+de código que conforman el código a ejecutar por la función.
+
+También podemos encontrarnos con una cadena de texto como 
+primera línea del cuerpo de la función. Estas cadenas se conocen con 
+el nombre de docstring (cadena de documentación) y sirven, como su 
+nombre indica, a modo de documentación de la función.
+
+.. code-block:: nim
+
+ def mi_funcion(param1, param2):
+    “““Esta funcion imprime los dos valores pasados
+    como parametros”””
+    print param1
+    print param2
+
+Esto es lo que imprime el opeardor ? de iPython o la función help 
+del lenguaje para proporcionar una ayuda sobre el uso y utilidad de 
+las funciones. Todos los objetos pueden tener docstrings, no solo las 
+funciones, como veremos más adelante.
+
+Volviendo a la declaración de funciones, es importante aclarar que 
+al declarar la función lo único que hacemos es asociar un nombre al 
+fragmento de código que conforma la función, de forma que podamos 
+ejecutar dicho código más tarde referenciándolo por su nombre. Es 
+decir, a la hora de escribir estas líneas no se ejecuta la función. Para 
+llamar a la función (ejecutar su código) se escribiría:
+
+.. code-block:: nim
+
+ mi_funcion(“hola”, 2)
+
+Es decir, el nombre de la función a la que queremos llamar seguido de 
+los valores que queramos pasar como parámetros entre paréntesis. La 
+asociación de los parámetros y los valores pasados a la función se hace 
+normalmente de izquierda a derecha: como a param1 le hemos dado un 
+valor “hola” y param2 vale 2, mi_funcion imprimiría hola en una línea, 
+y a continuación 2.
+
+Sin embargo también es posible modificar el orden de los parámetros 
+si indicamos el nombre del parámetro al que asociar el valor a la hora 
+de llamar a la función:
+
+.. code-block:: nim
+
+ mi_funcion(param2 = 2, param1 = “hola”)
+
+El número de valores que se pasan como parámetro al llamar a la fun-
+ción tiene que coincidir con el número de parámetros que la función 
+acepta según la declaración de la función. En caso contrario Python se 
+quejará:
+
+.. code-block:: nim
+
+ >>> mi_funcion(“hola”)
+ Traceback (most recent call last):
+ File “<stdin>”, line 1, in <module>
+ TypeError: mi_funcion() takes exactly 2 arguments (1 given)
+
+También es posible, no obstante, definir funciones con un número va-
+riable de argumentos, o bien asignar valores por defecto a los paráme-
+tros para el caso de que no se indique ningún valor para ese parámetro 
+al llamar a la función.
