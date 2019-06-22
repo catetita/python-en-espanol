@@ -827,3 +827,171 @@ ejemplo, veamos un diccionario de películas y directores:
 
  d = {“Love Actually “: “Richard Curtis”,
      “Kill Bill”: “Tarantino”,
+ “Amélie”: “Jean-Pierre Jeunet”}
+
+El primer valor se trata de la clave y el segundo del valor asociado 
+a la clave. Como clave podemos utilizar cualquier valor inmutable: 
+podríamos usar números, cadenas, booleanos, tuplas, … pero no listas 
+o diccionarios, dado que son mutables. Esto es así porque los diccio-
+narios se implementan como tablas hash, y a la hora de introducir un 
+nuevo par clave-valor en el diccionario se calcula el hash de la clave 
+para después poder encontrar la entrada correspondiente rápidamente. 
+Si se modificara el objeto clave después de haber sido introducido en el 
+diccionario, evidentemente, su hash también cambiaría y no podría ser 
+encontrado.
+
+La diferencia principal entre los diccionarios y las listas o las tuplas es 
+que a los valores almacenados en un diccionario se les accede no por su 
+índice, porque de hecho no tienen orden, sino por su clave, utilizando 
+de nuevo el operador [].
+
+.. code-block:: nim
+
+ d[“Love Actually “] # devuelve “Richard Curtis”
+
+Al igual que en listas y tuplas también se puede utilizar este operador 
+para reasignar valores.
+
+.. code-block:: nim
+
+ d[“Kill Bill”] = “Quentin Tarantino”
+
+Sin embargo en este caso no se puede utilizar slicing, entre otras cosas 
+porque los diccionarios no son secuencias, si no mappings (mapeados, 
+asociaciones).
+
+
+**Control de flujo**
+------------------
+
+En esta lección vamos a ver los condicionales y los bucles.
+
+**Sentencias condicionales**
+
+Si un programa no fuera más que una lista de órdenes a ejecutar de 
+forma secuencial, una por una, no tendría mucha utilidad. Los con-
+dicionales nos permiten comprobar condiciones y hacer que nuestro 
+programa se comporte de una forma u otra, que ejecute un fragmento 
+de código u otro, dependiendo de esta condición.
+
+Aquí es donde cobran su importancia el tipo booleano y los operadores 
+lógicos y relacionales que aprendimos en el capítulo sobre los tipos 
+básicos de Python.
+
+**if**
+
+La forma más simple de un estamento condicional es un if (del inglés 
+si) seguido de la condición a evaluar, dos puntos (:) y en la siguiente 
+línea e indentado, el código a ejecutar en caso de que se cumpla dicha 
+condición.
+
+.. code-block:: nim
+
+ fav = “mundogeek.net”
+ # si (if) fav es igual a “mundogeek.net”
+ if fav == “mundogeek.net”:
+    print “Tienes buen gusto!”
+    print “Gracias”
+
+Como veis es bastante sencillo.
+
+Eso si, aseguraros de que indentáis el código tal cual se ha hecho en el 
+ejemplo, es decir, aseguraros de pulsar Tabulación antes de las dos ór-
+denes print, dado que esta es la forma de Python de saber que vuestra 
+intención es la de que los dos print se ejecuten sólo en el caso de que 
+se cumpla la condición, y no la de que se imprima la primera cadena si 
+se cumple la condición y la otra siempre, cosa que se expresaría así:
+
+.. code-block:: nim
+
+ if fav == “mundogeek.net”:
+    print “Tienes buen gusto!”
+ print “Gracias”
+
+
+En otros lenguajes de programación los bloques de código se determi-
+nan encerrándolos entre llaves, y el indentarlos no se trata más que de 
+una buena práctica para que sea más sencillo seguir el flujo del progra-
+ma con un solo golpe de vista. Por ejemplo, el código anterior expresa-
+do en Java sería algo así:
+
+.. code-block:: nim
+
+ String fav = “mundogeek.net”;
+ if (fav.equals(“mundogeek.net”)){
+    System.out.println(“Tienes buen gusto!”);
+    System.out.println(“Gracias”);
+ }
+
+Sin embargo, como ya hemos comentado, en Python se trata de una 
+obligación, y no de una elección. De esta forma se obliga a los progra-
+madores a indentar su código para que sea más sencillo de leer :)
+
+**if … else**
+
+Vamos a ver ahora un condicional algo más complicado. ¿Qué haría-
+mos si quisiéramos que se ejecutaran unas ciertas órdenes en el caso de 
+que la condición no se cumpliera? Sin duda podríamos añadir otro if 
+que tuviera como condición la negación del primero:
+
+.. code-block:: nim
+
+ if fav == “mundogeek.net”:
+    print “Tienes buen gusto!”
+    print “Gracias”
+ if fav != “mundogeek.net”:
+    print “Vaya, que lástima”
+ 
+pero el condicional tiene una segunda construcción mucho más útil:
+
+.. code-block:: nim
+ if fav == “mundogeek.net”:
+    print “Tienes buen gusto!”
+    print “Gracias”
+ else:
+    print “Vaya, que lástima”
+
+Vemos que la segunda condición se puede sustituir con un else (del 
+inglés: si no, en caso contrario). Si leemos el código vemos que tiene 
+bastante sentido: “si fav es igual a mundogeek.net, imprime esto y esto, 
+si no, imprime esto otro”.
+
+**if … elif … elif … else**
+
+Todavía queda una construcción más que ver, que es la que hace uso 
+del elif.
+
+.. code-block:: nim
+
+ if numero < 0:
+    print “Negativo”
+ elif numero > 0:
+    print “Positivo”
+ else:
+    print “Cero”
+
+elif es una contracción de else if, por lo tanto elif numero > 0 puede 
+leerse como “si no, si numero es mayor que 0”. Es decir, primero se 
+evalúa la condición del if. Si es cierta, se ejecuta su código y se con-
+tinúa ejecutando el código posterior al condicional; si no se cumple, 
+se evalúa la condición del elif. Si se cumple la condición del elif 
+se ejecuta su código y se continua ejecutando el código posterior al 
+condicional; si no se cumple y hay más de un elif se continúa con el 
+siguiente en orden de aparición. Si no se cumple la condición del if ni 
+de ninguno de los elif, se ejecuta el código del else.
+
+**A if C else B**
+
+También existe una construcción similar al operador ? de otros lengua-
+jes, que no es más que una forma compacta de expresar un if else. En 
+esta construcción se evalúa el predicado C y se devuelve A si se cumple 
+o B si no se cumple: A if C else B. Veamos un ejemplo:
+
+.. code-block:: nim
+
+ var = “par” if (num % 2 == 0) else “impar”
+ 
+Y eso es todo. Si conocéis otros lenguajes de programación puede que 
+esperarais que os hablara ahora del switch, pero en Python no existe 
+esta construcción, que podría emularse con un simple diccionario, así 
+que pasemos directamente a los bucles.
