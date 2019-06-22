@@ -467,12 +467,12 @@ Operador             Descripción          Ejemplo
 ================= ================= ============================
 Operador            Descripción        Ejemplo
 ================= ================= ============================
-     -              Negación           r = -7       # r es -7
-     *              Multiplicación     r = 2 * 6    # r es 12
-     * *            Exponente          r = 2 * * 6   # r es 64
-     /              División           r = 3.5 / 2  # r es 1.75
-     //             División entera    r = 3.5 // 2 # r es 1.0
-     %              Módulo             r = 7 % 2    # r es 1
+     ``-``          Negación           r = -7       # r es -7
+     ``*``          Multiplicación     r = 2 * 6    # r es 12
+     ``**``         Exponente          r = 2 * * 6   # r es 64
+     ``/``          División           r = 3.5 / 2  # r es 1.75
+     ``//``         División entera    r = 3.5 // 2 # r es 1.0
+     ``%``          Módulo             r = 7 % 2    # r es 1
 ================= ================= ============================ 
 
 
@@ -544,11 +544,15 @@ bit; es decir, si el operando es 0, cambia a 1 y si es 1, cambia a 0.
 Por último los operadores de desplazamiento (<< y >>) sirven para 
 desplazar los bits n posiciones hacia la izquierda o la derecha.
 
-========= ============== ======================
-Operador   Descripción     Ejemplo
-========= ============== ======================
-&             and         r = 3 & 2  # r es 2
-|             or          r = 3 | 2  # r es 3
-^             xor         r = 3 ^ 2  # r es 1
-~             not         r = ~3     # r es -4
-========= ============== ======================
+========= ================== ======================
+Operador   Descripción        Ejemplo
+========= ================== ======================
+&             and             r = 3 & 2  # r es 2
+|             or              r = 3 | 2  # r es 3
+^             xor             r = 3 ^ 2  # r es 1
+~             not             r = ~3     # r es -4
+<<        Desplazamiento izq. r = 3 << 1 # r es 6
+>>        Desplazamiento der. r = 3 >> 1 # r es 1
+========= ================== ======================
+
+
