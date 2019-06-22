@@ -622,8 +622,8 @@ Operador      Descripción        Ejemplo
 ========== ================== ===================================
 and        ¿se cumple a y b?    r = True and False # r es False
 or         ¿se cumple a o b?    r = True or False  # r es True
-not          No a               r = not True   # r es False
-========= =================== ===================================
+not        No a                 r = not True   # r es False
+========== ================== ===================================
 
 Los valores booleanos son además el resultado de expresiones que 
 utilizan operadores relacionales (comparaciones entre valores):
