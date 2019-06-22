@@ -556,3 +556,85 @@ Operador   Descripción         Ejemplo
 ========= =================== ======================
 
 
+**Cadenas**
+
+Las cadenas no son más que texto encerrado entre comillas simples 
+(‘cadena’) o dobles (“cadena”). Dentro de las comillas se pueden 
+añadir caracteres especiales escapándolos con \, como \n, el carácter de 
+nueva línea, o \t, el de tabulación.
+
+Una cadena puede estar precedida por el carácter u o el carácter r, los 
+cuales indican, respectivamente, que se trata de una cadena que utiliza 
+codificación Unicode y una cadena raw (del inglés, cruda). Las cade-
+nas raw se distinguen de las normales en que los caracteres escapados 
+mediante la barra invertida (\) no se sustituyen por sus contrapartidas. 
+Esto es especialmente útil, por ejemplo, para las expresiones regulares, 
+como veremos en el capítulo correspondiente.
+
+.. code-block:: nim
+
+ unicode = u”äóè”
+ raw = r”\n”
+
+También es posible encerrar una cadena entre triples comillas (simples 
+o dobles). De esta forma podremos escribir el texto en varias líneas, y 
+al imprimir la cadena, se respetarán los saltos de línea que introdujimos 
+sin tener que recurrir al carácter \n, así como las comillas sin tener que 
+escaparlas.
+
+.. code-block:: nim
+
+ triple = “““primera linea
+            esto se vera en otra linea”””
+
+
+Las cadenas también admiten operadores como +, que funciona reali-
+zando una concatenación de las cadenas utilizadas como operandos y 
+*, en la que se repite la cadena tantas veces como lo indique el número 
+utilizado como segundo operando.
+
+.. code-block:: nim
+
+ a = “uno”
+ b = “dos”
+
+ c = a + b # c es “unodos”
+ c = a * 3 # c es “unounouno”
+
+**Booleanos**
+
+Como decíamos al comienzo del capítulo una variable de tipo boolea-
+no sólo puede tener dos valores: True (cierto) y False (falso). Estos 
+valores son especialmente importantes para las expresiones condicio-
+nales y los bucles, como veremos más adelante.
+
+En realidad el tipo bool (el tipo de los booleanos) es una subclase del 
+tipo int. Puede que esto no tenga mucho sentido para tí si no conoces 
+los términos de la orientación a objetos, que veremos más adelante, 
+aunque tampoco es nada importante.
+
+Estos son los distintos tipos de operadores con los que podemos traba-
+jar con valores booleanos, los llamados operadores lógicos o condicio-
+nales:
+
+========== ================== ===================================
+Operador      Descripción        Ejemplo
+========== ================== ===================================
+and        ¿se cumple a y b?    r = True and False # r es False
+or         ¿se cumple a o b?    r = True or False  # r es True
+not          No a               r = not True   # r es False
+========= =================== ===================================
+
+Los valores booleanos son además el resultado de expresiones que 
+utilizan operadores relacionales (comparaciones entre valores):
+
+========= ============================ ==========================
+Operador    Descripción                  Ejemplo
+========= ============================ ==========================
+==          ¿son iguales a y b?          r = 5 == 3 # r es False
+!=          ¿son distintos a y b?        r = 5 != 3 # r es True
+<           ¿es a menor que b?           r = 5 < 3  # r es False
+>           ¿es a mayor que b?           r = 5 > 3  # r es True
+<=          ¿es a menor o igual que b?   r = 5 <= 5 # r es True
+>=          ¿es a mayor o igual que b?   r = 5 >= 3 # r es True
+========= ============================ ==========================
