@@ -1901,3 +1901,82 @@ count, este indica el número máximo de ocurrencias a reemplazar.
 S.split([sep [,maxsplit]])
 Devuelve una lista conteniendo las subcadenas en las que se divide 
 nuestra cadena al dividirlas por el delimitador sep. En el caso de que 
+no se especifique sep, se usan espacios. Si se especifica maxsplit, este 
+indica el número máximo de particiones a realizar.
+
+**Listas**
+
+L.append(object)
+Añade un objeto al final de la lista.
+
+L.count(value)
+Devuelve el número de veces que se encontró value en la lista.
+
+L.extend(iterable)
+Añade los elementos del iterable a la lista.
+
+L.index(value[, start[, stop]])
+Devuelve la posición en la que se encontró la primera ocurrencia de 
+value. Si se especifican, start y stop definen las posiciones de inicio y 
+fin de una sublista en la que buscar.
+
+L.insert(index, object)
+Inserta el objeto object en la posición index.
+
+L.pop([index])
+Devuelve el valor en la posición index y lo elimina de la lista. Si no se 
+especifica la posición, se utiliza el último elemento de la lista.
+
+L.remove(value)
+Eliminar la primera ocurrencia de value en la lista.
+
+L.reverse()
+Invierte la lista. Esta función trabaja sobre la propia lista desde la que 
+se invoca el método, no sobre una copia.
+
+L.sort(cmp=None, key=None, reverse=False)
+Ordena la lista. Si se especifica cmp, este debe ser una función que tome 
+como parámetro dos valores x e y de la lista y devuelva -1 si x es menor 
+que y, 0 si son iguales y 1 si x es mayor que y.
+
+El parámetro reverse es un booleano que indica si se debe ordenar 
+la lista de forma inversa, lo que sería equivalente a llamar primero a 
+L.sort() y después a L.reverse().
+
+Por último, si se especifica, el parámetro key debe ser una función que 
+tome un elemento de la lista y devuelva una clave a utilizar a la hora de 
+comparar, en lugar del elemento en si.
+
+**prograMaCión funCional**
+-------------------------
+
+La programación funcional es un paradigma en el que la programa-
+ción se basa casi en su totalidad en funciones, entendiendo el concepto 
+de función según su definición matemática, y no como los simples 
+subprogramas de los lenguajes imperativos que hemos visto hasta 
+ahora.
+
+En los lenguajes funcionales puros un programa consiste exclusiva-
+mente en la aplicación de distintas funciones a un valor de entrada 
+para obtener un valor de salida.
+
+Python, sin ser un lenguaje puramente funcional incluye varias caracte-
+rísticas tomadas de los lenguajes funcionales como son las funciones de 
+orden superior o las funciones lambda (funciones anónimas).
+
+**Funciones de orden superior**
+
+El concepto de funciones de orden superior se refiere al uso de fun-
+ciones como si de un valor cualquiera se tratara, posibilitando el pasar 
+funciones como parámetros de otras funciones o devolver funciones 
+como valor de retorno.
+
+Esto es posible porque, como hemos insistido ya en varias ocasiones, 
+en Python todo son objetos. Y las funciones no son una excepción.
+Veamos un pequeño ejemplo
+
+.. code-block:: nim
+ def saludar(lang):
+    def saludar_es():
+
+    
