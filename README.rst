@@ -1441,3 +1441,136 @@ atributos y métodos según lo que fuera relevante para nuestro progra-
 ma.
 
 Una clase, por otro lado, no es más que una plantilla genérica a partir 
+de la cuál instanciar los objetos; plantilla que es la que define qué atri-
+butos y métodos tendrán los objetos de esa clase.
+
+Volviendo a nuestro ejemplo: en el mundo real existe un conjunto de 
+objetos a los que llamamos coches y que tienen un conjunto de atribu-
+tos comunes y un comportamiento común, esto es a lo que llamamos 
+clase. Sin embargo, mi coche no es igual que el coche de mi vecino, y 
+aunque pertenecen a la misma clase de objetos, son objetos distintos.
+
+En Python las clases se definen mediante la palabra clave class segui-
+da del nombre de la clase, dos puntos (:) y a continuación, indentado, 
+el cuerpo de la clase. Como en el caso de las funciones, si la primera 
+línea del cuerpo se trata de una cadena de texto, esta será la cadena de 
+documentación de la clase o docstring.
+
+.. code-block:: nim
+
+ class Coche:
+    “””Abstraccion de los objetos coche.”””
+    def __init__(self, gasolina):
+        self.gasolina = gasolina
+        print “Tenemos”, gasolina, “litros”
+    def arrancar(self):
+        if self.gasolina > 0:
+            print “Arranca”
+        else:
+            print “No arranca”
+    def conducir(self):
+        if self.gasolina > 0:
+            self.gasolina -= 1
+            print “Quedan”, self.gasolina, “litros”
+        else:
+            print “No se mueve”
+
+
+Lo primero que llama la atención en el ejemplo anterior es el nombre 
+tan curioso que tiene el método _ _ init _ _. Este nombre es una conven-
+ción y no un capricho. El método _ _ init _ _, con una doble barra baja al 
+principio y final del nombre, se ejecuta justo después de crear un nuevo 
+objeto a partir de la clase, proceso que se conoce con el nombre de 
+instanciación. El método _ _ init _ _ sirve, como sugiere su nombre, para 
+realizar cualquier proceso de inicialización que sea necesario.
+
+Como vemos el primer parámetro de _ _ init _ _ y del resto de métodos 
+de la clase es siempre self. Esta es una idea inspirada en Modula-3 y 
+sirve para referirse al objeto actual. Este mecanismo es necesario para 
+poder acceder a los atributos y métodos del objeto diferenciando, por 
+ejemplo, una variable local mi_var de un atributo del objeto self.
+mi_var.
+
+Si volvemos al método __init__ de nuestra clase Coche veremos cómo 
+se utiliza self para asignar al atributo gasolina del objeto (self.gaso-
+lina) el valor que el programador especificó para el parámetro gasoli-
+na. El parámetro gasolina se destruye al final de la función, mientras 
+que el atributo gasolina se conserva (y puede ser accedido) mientras el 
+objeto viva.
+
+Para crear un objeto se escribiría el nombre de la clase seguido de cual-
+quier parámetro que sea necesario entre paréntesis. Estos parámetros 
+son los que se pasarán al método __init__, que como decíamos es el 
+método que se llama al instanciar la clase.
+
+.. code-block:: nim
+
+ mi_coche = Coche(3)
+
+Os preguntareis entonces cómo es posible que a la hora de crear nues-
+tro primer objeto pasemos un solo parámetro a __init__, el número 
+3, cuando la definición de la función indica claramente que precisa de 
+dos parámetros (self y gasolina). Esto es así porque Python pasa el 
+primer argumento (la referencia al objeto que se crea) automágicamen-
+te.
+
+Ahora que ya hemos creado nuestro objeto, podemos acceder a sus 
+atributos y métodos mediante la sintaxis objeto.atributo y objeto.
+metodo():
+
+.. code-block:: nim
+
+ >>> print mi_coche.gasolina
+ 3
+ >>> mi_coche.arrancar()
+ Arranca
+ >>> mi_coche.conducir()
+ Quedan 2 litros
+ >>> mi_coche.conducir()
+ Quedan 1 litros
+ >>> mi_coche.conducir()
+ Quedan 0 litros
+ >>> mi_coche.conducir()
+ No se mueve
+ >>> mi_coche.arrancar()
+ No arranca
+ >>> print mi_coche.gasolina
+ 0
+
+Como último apunte recordar que en Python, como ya se comentó 
+en repetidas ocasiones anteriormente, todo son objetos. Las cadenas, 
+por ejemplo, tienen métodos como upper(), que devuelve el texto en 
+mayúsculas o count(sub), que devuelve el número de veces que se 
+encontró la cadena sub en el texto.
+
+**Herencia**
+
+Hay tres conceptos que son básicos para cualquier lenguaje de pro-
+gramación orientado a objetos: el encapsulamiento, la herencia y el 
+polimorfismo.
+
+En un lenguaje orientado a objetos cuando hacemos que una clase 
+(subclase) herede de otra clase (superclase) estamos haciendo que la 
+subclase contenga todos los atributos y métodos que tenía la supercla-
+se. No obstante al acto de heredar de una clase también se le llama a 
+menudo “extender una clase”.
+
+Supongamos que queremos modelar los instrumentos musicales de 
+una banda, tendremos entonces una clase Guitarra, una clase Batería, 
+una clase Bajo, etc. Cada una de estas clases tendrá una serie de atribu-
+tos y métodos, pero ocurre que, por el mero hecho de ser instrumentos 
+musicales, estas clases compartirán muchos de sus atributos y métodos; 
+un ejemplo sería el método tocar().
+
+Es más sencillo crear un tipo de objeto Instrumento con las atributos y 
+métodos comunes e indicar al programa que Guitarra, Batería y Bajo 
+son tipos de instrumentos, haciendo que hereden de Instrumento.
+
+Para indicar que una clase hereda de otra se coloca el nombre de la cla-
+se de la que se hereda entre paréntesis después del nombre de la clase:
+
+.. code-block:: nim
+
+ class Instrumento:
+    def __init__(self, precio):
+
