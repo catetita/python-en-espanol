@@ -1976,7 +1976,120 @@ en Python todo son objetos. Y las funciones no son una excepción.
 Veamos un pequeño ejemplo
 
 .. code-block:: nim
+
  def saludar(lang):
     def saludar_es():
+  print “Hola”
+    def saludar_en():
+        print “Hi”
+    def saludar_fr():
+        print “Salut”
+    lang_func = {“es”: saludar_es,
+                 “en”: saludar_en,
+                 “fr”: saludar_fr}
+    return lang_func[lang]
+ f = saludar(“es”)
+ f()
 
-    
+Como podemos observar lo primero que hacemos en nuestro pequeño 
+programa es llamar a la función saludar con un parámetro “es”. En la 
+función saludar se definen varias funciones: saludar_es, saludar_en y 
+saludar_fr y a continuación se crea un diccionario que tiene como cla-
+ves cadenas de texto que identifican a cada lenguaje, y como valores las 
+funciones. El valor de retorno de la función es una de estas funciones. 
+La función a devolver viene determinada por el valor del parámetro 
+lang que se pasó como argumento de saludar.
+
+Como el valor de retorno de saludar es una función, como hemos 
+visto, esto quiere decir que f es una variable que contiene una función. 
+Podemos entonces llamar a la función a la que se refiere f de la forma 
+en que llamaríamos a cualquier otra función, añadiendo unos parénte-
+sis y, de forma opcional, una serie de parámetros entre los paréntesis.
+
+Esto se podría acortar, ya que no es necesario almacenar la función que 
+nos pasan como valor de retorno en una variable para poder llamarla:
+
+.. code-block:: nim
+
+ >>> saludar(“en”)()
+ Hi
+ >>> saludar(“fr”)()
+ Salut
+
+En este caso el primer par de paréntesis indica los parámetros de la 
+función saludar, y el segundo par, los de la función devuelta por salu-
+dar.
+
+**Iteraciones de orden superior sobre listas**
+-----------------------
+
+Una de las cosas más interesantes que podemos hacer con nuestras 
+funciones de orden superior es pasarlas como argumentos de las fun-
+ciones map, filter y reduce. Estas funciones nos permiten sustituir los 
+bucles típicos de los lenguajes imperativos mediante construcciones 
+equivalentes.
+
+**map(function, sequence[, sequence, ...])**
+
+La función map aplica una función a cada elemento de una secuencia y 
+devuelve una lista con el resultado de aplicar la función a cada elemen-
+to. Si se pasan como parámetros n secuencias, la función tendrá que 
+aceptar n argumentos. Si alguna de las secuencias es más pequeña que 
+las demás, el valor que le llega a la función function para posiciones 
+mayores que el tamaño de dicha secuencia será None.
+
+A continuación podemos ver un ejemplo en el que se utiliza map para 
+elevar al cuadrado todos los elementos de una lista:
+
+.. code-block:: nim
+
+ def cuadrado(n):
+    return n ** 2
+ l = [1, 2, 3]
+ l2 = map(cuadrado, l)
+
+**filter(function, sequence)**
+
+La funcion filter verifica que los elementos de una secuencia cum-
+plan una determinada condición, devolviendo una secuencia con los 
+elementos que cumplen esa condición. Es decir, para cada elemento de 
+sequence se aplica la función function; si el resultado es True se añade 
+a la lista y en caso contrario se descarta.
+
+A continuación podemos ver un ejemplo en el que se utiliza filter 
+para conservar solo los números que son pares.
+
+.. code-block:: nim
+
+ def es_par(n):
+    return (n % 2.0 == 0)
+ l = [1, 2, 3]
+
+l2 = filter(es_par, l)
+reduce(function, sequence[, initial])
+La función reduce aplica una función a pares de elementos de una 
+secuencia hasta dejarla en un solo valor.
+A continuación podemos ver un ejemplo en el que se utiliza reduce 
+para sumar todos los elementos de una lista.
+def sumar(x, y):
+    return x + y
+l = [1, 2, 3]
+l2 = reduce(sumar, l)
+Funciones lambda
+El operador lambda sirve para crear funciones anónimas en línea. Al ser 
+funciones anónimas, es decir, sin nombre, estas no podrán ser referen-
+ciadas más tarde.
+Las funciones lambda se construyen mediante el operador lambda, los 
+parámetros de la función separados por comas (atención, SIN parénte-
+sis), dos puntos (:) y el código de la función.
+Esta construcción podrían haber sido de utilidad en los ejemplos an-
+teriores para reducir código. El programa que utilizamos para explicar 
+filter, por ejemplo, podría expresarse así:
+l = [1, 2, 3]
+l2 = filter(lambda n: n % 2.0 == 0, l)
+Comparemoslo con la versión anterior:
+def es_par(n):
+    return (n % 2.0 == 0)
+l = [1, 2, 3]
+l2 = filter(es_par, l)
+Las funciones lambda están restringidas por la sintaxis a una sola 
