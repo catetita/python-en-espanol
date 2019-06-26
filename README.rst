@@ -1573,4 +1573,86 @@ se de la que se hereda entre paréntesis después del nombre de la clase:
 
  class Instrumento:
     def __init__(self, precio):
+ self.precio = precio
+    def tocar(self):
+        print “Estamos tocando musica”
+    def romper(self):
+        print “Eso lo pagas tu”
+        print “Son”, self.precio, “$$$”
+ class Bateria(Instrumento):
+    pass
+ class Guitarra(Instrumento):
+    pass
 
+Como Bateria y Guitarra heredan de Instrumento, ambos tienen un 
+método tocar() y un método romper(), y se inicializan pasando un 
+parámetro precio. Pero, ¿qué ocurriría si quisiéramos especificar un 
+nuevo parámetro tipo_cuerda a la hora de crear un objeto Guitarra? 
+Bastaría con escribir un nuevo método __init__ para la clase Guitarra 
+que se ejecutaría en lugar del __init__ de Instrumento. Esto es lo que 
+se conoce como sobreescribir métodos.
+
+Ahora bien, puede ocurrir en algunos casos que necesitemos sobrees-
+cribir un método de la clase padre, pero que en ese método queramos 
+ejecutar el método de la clase padre porque nuestro nuevo método no 
+necesite más que ejecutar un par de nuevas instrucciones extra. En ese 
+caso usaríamos la sintaxis SuperClase.metodo(self, args) para llamar 
+al método de igual nombre de la clase padre. Por ejemplo, para llamar 
+al método __init__ de Instrumento desde Guitarra usaríamos Instru-
+mento.__init__(self, precio)
+
+Observad que en este caso si es necesario especificar el parámetro self.
+
+**Herencia múltiple**
+
+En Python, a diferencia de otros lenguajes como Java o C#, se permite 
+la herencia múltiple, es decir, una clase puede heredar de varias clases a 
+la vez. Por ejemplo, podríamos tener una clase Cocodrilo que heredara 
+de la clase Terrestre, con métodos como caminar() y atributos como 
+velocidad_caminar y de la clase Acuatico, con métodos como nadar() 
+y atributos como velocidad_nadar. Basta con enumerar las clases de 
+
+las que se hereda separándolas por comas:
+
+.. code-block:: nim
+
+ class Cocodrilo(Terrestre, Acuatico):
+    pass
+
+En el caso de que alguna de las clases padre tuvieran métodos con el 
+mismo nombre y número de parámetros las clases sobreescribirían la 
+implementación de los métodos de las clases más a su derecha en la 
+definición.
+
+En el siguiente ejemplo, como Terrestre se encuentra más a la iz-
+quierda, sería la definición de desplazar de esta clase la que prevale-
+cería, y por lo tanto si llamamos al método desplazar de un objeto de 
+tipo Cocodrilo lo que se imprimiría sería “El animal anda”.
+
+.. code-block:: nim
+
+ class Terrestre:
+    def desplazar(self):
+        print “El animal anda”
+ class Acuatico:
+    def desplazar(self):
+        print “El animal nada”
+ class Cocodrilo(Terrestre, Acuatico):
+    pass
+ c = Cocodrilo()
+ c.desplazar()
+
+**Polimorfismo**
+
+La palabra polimorfismo, del griego poly morphos (varias formas), se re-
+fiere a la habilidad de objetos de distintas clases de responder al mismo 
+mensaje. Esto se puede conseguir a través de la herencia: un objeto de 
+una clase derivada es al mismo tiempo un objeto de la clase padre, de 
+forma que allí donde se requiere un objeto de la clase padre también se 
+puede utilizar uno de la clase hija.
+
+Python, al ser de tipado dinámico, no impone restricciones a los tipos 
+que se le pueden pasar a una función, por ejemplo, más allá de que el 
+objeto se comporte como se espera: si se va a llamar a un método f() 
+del objeto pasado como parámetro, por ejemplo, evidentemente el 
+objeto tendrá que contar con ese método. Por ese motivo, a diferencia 
