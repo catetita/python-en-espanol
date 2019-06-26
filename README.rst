@@ -1382,4 +1382,62 @@ Con esto terminamos todo lo relacionado con los parámetros de las
 funciones. Veamos por último cómo devolver valores, para lo que se 
 utiliza la palabra clave return:
 
+.. code-block:: nim
 
+ def sumar(x, y):
+    return x + y
+
+.. code-block:: nim   
+
+ print sumar(3, 2)
+
+Como vemos esta función tan sencilla no hace otra cosa que sumar los 
+valores pasados como parámetro y devolver el resultado como valor de 
+retorno.
+
+También podríamos pasar varios valores que retornar a return.
+
+.. code-block:: nim
+
+ def f(x, y):
+    return x * 2, y * 2
+
+.. code-block:: nim
+
+ a, b = f(1, 2)
+
+Sin embargo esto no quiere decir que las funciones Python puedan de-
+volver varios valores, lo que ocurre en realidad es que Python crea una 
+tupla al vuelo cuyos elementos son los valores a retornar, y esta única 
+variable es la que se devuelve.
+
+**orientaCión a objetos**
+-------------------------
+
+En el capítulo de introducción ya comentábamos que Python es un 
+lenguaje multiparadigma en el se podía trabajar con programación es-
+tructurada, como veníamos haciendo hasta ahora, o con programación 
+orientada a objetos o programación funcional.
+
+La Programación Orientada a Objetos (POO u OOP según sus siglas 
+en inglés) es un paradigma de programación en el que los conceptos 
+del mundo real relevantes para nuestro problema se modelan a través 
+de clases y objetos, y en el que nuestro programa consiste en una serie 
+de interacciones entre estos objetos.
+
+**Clases y objetos**
+
+Para entender este paradigma primero tenemos que comprender qué es 
+una clase y qué es un objeto. Un objeto es una entidad que agrupa un 
+estado y una funcionalidad relacionadas. El estado del objeto se define 
+a través de variables llamadas atributos, mientras que la funcionalidad 
+se modela a través de funciones a las que se les conoce con el nombre 
+de métodos del objeto.
+
+Un ejemplo de objeto podría ser un coche, en el que tendríamos atri-
+butos como la marca, el número de puertas o el tipo de carburante y 
+métodos como arrancar y parar. O bien cualquier otra combinación de 
+atributos y métodos según lo que fuera relevante para nuestro progra-
+ma.
+
+Una clase, por otro lado, no es más que una plantilla genérica a partir 
