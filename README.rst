@@ -1241,3 +1241,145 @@ También es posible, no obstante, definir funciones con un número va-
 riable de argumentos, o bien asignar valores por defecto a los paráme-
 tros para el caso de que no se indique ningún valor para ese parámetro 
 al llamar a la función.
+
+Los valores por defecto para los parámetros se definen situando un 
+signo igual después del nombre del parámetro y a continuación el valor 
+por defecto:
+
+.. code-block:: nim
+
+ def imprimir(texto, veces = 1):
+    print veces * texto
+
+En el ejemplo anterior si no indicamos un valor para el segundo 
+parámetro se imprimirá una sola vez la cadena que le pasamos como 
+primer parámetro:
+
+.. code-block:: nim
+
+ >>> imprimir(“hola”)
+ hola
+
+si se le indica otro valor, será este el que se utilice:
+
+.. code-block:: nim
+ >>> imprimir(“hola”, 2)
+ holahola
+
+Para definir funciones con un número variable de argumentos coloca-
+mos un último parámetro para la función cuyo nombre debe preceder-
+se de un signo *:
+
+.. code-block:: nim
+
+ def varios(param1, param2, *otros):
+    for val in otros:
+        print val
+
+.. code-block:: nim
+
+ varios(1, 2)
+ varios(1, 2, 3)
+ varios(1, 2, 3, 4)
+
+Esta sintaxis funciona creando una tupla (de nombre otros en el 
+ejemplo) en la que se almacenan los valores de todos los parámetros 
+extra pasados como argumento. Para la primera llamada, varios(1, 2), 
+la tupla otros estaría vacía dado que no se han pasado más parámetros 
+que los dos definidos por defecto, por lo tanto no se imprimiría nada. 
+En la segunda llamada otros valdría (3, ), y en la tercera (3, 4).
+
+
+También se puede preceder el nombre del último parámetro con **, en 
+cuyo caso en lugar de una tupla se utilizaría un diccionario. Las claves 
+de este diccionario serían los nombres de los parámetros indicados al 
+llamar a la función y los valores del diccionario, los valores asociados a 
+estos parámetros.
+
+En el siguiente ejemplo se utiliza la función items de los diccionarios, 
+que devuelve una lista con sus elementos, para imprimir los parámetros 
+que contiene el diccionario.
+
+.. code-block:: nim
+
+ def varios(param1, param2, **otros):
+    for i in otros.items():
+        print i
+ varios(1, 2, tercero = 3)
+
+Los que conozcáis algún otro lenguaje de programación os estaréis 
+preguntando si en Python al pasar una variable como argumento de 
+una función estas se pasan por referencia o por valor. En el paso por 
+referencia lo que se pasa como argumento es una referencia o puntero 
+a la variable, es decir, la dirección de memoria en la que se encuentra el 
+contenido de la variable, y no el contenido en si. En el paso por valor, 
+por el contrario, lo que se pasa como argumento es el valor que conte-
+nía la variable.
+
+La diferencia entre ambos estriba en que en el paso por valor los 
+cambios que se hagan sobre el parámetro no se ven fuera de la fun-
+ción, dado que los argumentos de la función son variables locales a la 
+función que contienen los valores indicados por las variables que se 
+pasaron como argumento. Es decir, en realidad lo que se le pasa a la 
+función son copias de los valores y no las variables en si.
+Si quisiéramos modificar el valor de uno de los argumentos y que estos 
+cambios se reflejaran fuera de la función tendríamos que pasar el pará-
+metro por referencia.
+
+En C los argumentos de las funciones se pasan por valor, aunque se 
+puede simular el paso por referencia usando punteros. En Java también 
+se usa paso por valor, aunque para las variables que son objetos lo que 
+se hace es pasar por valor la referencia al objeto, por lo que en realidad 
+parece paso por referencia.
+
+En Python también se utiliza el paso por valor de referencias a objetos,
+como en Java, aunque en el caso de Python, a diferencia de Java, todo 
+es un objeto (para ser exactos lo que ocurre en realidad es que al objeto 
+se le asigna otra etiqueta o nombre en el espacio de nombres local de la 
+función).
+
+Sin embargo no todos los cambios que hagamos a los parámetros 
+dentro de una función Python se reflejarán fuera de esta, ya que hay 
+que tener en cuenta que en Python existen objetos inmutables, como 
+las tuplas, por lo que si intentáramos modificar una tupla pasada como 
+parámetro lo que ocurriría en realidad es que se crearía una nueva ins-
+tancia, por lo que los cambios no se verían fuera de la función.
+
+Veamos un pequeño programa para demostrarlo. En este ejemplo 
+se hace uso del método append de las listas. Un método no es más 
+que una función que pertenece a un objeto, en este caso a una lista; y 
+append, en concreto, sirve para añadir un elemento a una lista.
+
+.. code-block:: nim
+
+ def f(x, y):
+    x = x + 3
+    y.append(23)
+    print x, y
+
+.. code-block:: nim
+
+ x = 22
+ y = [22]
+ f(x, y)
+ print x, y
+
+El resultado de la ejecución de este programa sería
+
+.. code-block:: nim
+
+ 25 [22, 23]
+ 22 [22, 23]
+
+Como vemos la variable x no conserva los cambios una vez salimos de 
+la función porque los enteros son inmutables en Python. Sin embargo 
+la variable y si los conserva, porque las listas son mutables.
+
+En resumen: los valores mutables se comportan como paso por refe-
+rencia, y los inmutables como paso por valor.
+
+Con esto terminamos todo lo relacionado con los parámetros de las 
+funciones. Veamos por último cómo devolver valores, para lo que se 
+utiliza la palabra clave return:
+
+
