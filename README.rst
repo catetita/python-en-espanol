@@ -1656,3 +1656,248 @@ que se le pueden pasar a una función, por ejemplo, más allá de que el
 objeto se comporte como se espera: si se va a llamar a un método f() 
 del objeto pasado como parámetro, por ejemplo, evidentemente el 
 objeto tendrá que contar con ese método. Por ese motivo, a diferencia 
+de lenguajes de tipado estático como Java o C++, el polimorfismo en 
+Python no es de gran importancia.
+
+En ocasiones también se utiliza el término polimorfismo para referirse 
+a la sobrecarga de métodos, término que se define como la capacidad 
+del lenguaje de determinar qué método ejecutar de entre varios méto-
+dos con igual nombre según el tipo o número de los parámetros que se 
+le pasa. En Python no existe sobrecarga de métodos (el último método 
+sobreescribiría la implementación de los anteriores), aunque se puede 
+conseguir un comportamiento similar recurriendo a funciones con va-
+lores por defecto para los parámetros o a la sintaxis *params o **params 
+explicada en el capítulo sobre las funciones en Python, o bien usando 
+decoradores (mecanismo que veremos más adelante).
+
+**Encapsulación**
+
+La encapsulación se refiere a impedir el acceso a determinados mé-
+todos y atributos de los objetos estableciendo así qué puede utilizarse 
+desde fuera de la clase.
+
+Esto se consigue en otros lenguajes de programación como Java utili-
+zando modificadores de acceso que definen si cualquiera puede acceder 
+a esa función o variable (public) o si está restringido el acceso a la 
+propia clase (private).
+
+En Python no existen los modificadores de acceso, y lo que se suele 
+hacer es que el acceso a una variable o función viene determinado por 
+su nombre: si el nombre comienza con dos guiones bajos (y no termina 
+también con dos guiones bajos) se trata de una variable o función pri-
+vada, en caso contrario es pública. Los métodos cuyo nombre comien-
+za y termina con dos guiones bajos son métodos especiales que Python 
+llama automáticamente bajo ciertas circunstancias, como veremos al 
+final del capítulo.
+
+En el siguiente ejemplo sólo se imprimirá la cadena correspondiente al 
+método publico(), mientras que al intentar llamar al método __pri-
+vado() Python lanzará una excepción quejándose de que no existe 
+(evidentemente existe, pero no lo podemos ver porque es privado).
+
+.. code-block:: nim
+
+ class Ejemplo:
+    def publico(self):
+        print “Publico”
+    def __privado(self):
+        print “Privado”
+ ej = Ejemplo()
+ ej.publico()
+ ej.__privado()
+
+Este mecanismo se basa en que los nombres que comienzan con un 
+doble guión bajo se renombran para incluir el nombre de la clase 
+(característica que se conoce con el nombre de name mangling). Esto 
+implica que el método o atributo no es realmente privado, y podemos 
+acceder a él mediante una pequeña trampa:
+
+.. code-block:: nim
+
+ ej._Ejemplo__privado()
+
+En ocasiones también puede suceder que queramos permitir el acceso 
+a algún atributo de nuestro objeto, pero que este se produzca de forma 
+controlada. Para esto podemos escribir métodos cuyo único cometido 
+sea este, métodos que normalmente, por convención, tienen nombres 
+como getVariable y setVariable; de ahí que se conozcan también con 
+el nombre de getters y setters.
+
+.. code-block:: nim
+
+ class Fecha():
+    def __init__(self):
+        self.__dia = 1
+    def getDia(self):
+        return self.__dia
+    def setDia(self, dia):
+        if dia > 0 and dia < 31:
+            self.__dia = dia
+        else:
+            print “Error”
+ mi_fecha = Fecha()
+ mi_fecha.setDia(33)
+
+Esto se podría simplificar mediante propiedades, que abstraen al usua-
+rio del hecho de que se está utilizando métodos entre bambalinas para 
+obtener y modificar los valores del atributo:
+
+.. code-block:: nim
+
+ class Fecha(object):
+    def __init__(self):
+        self.__dia = 1
+    def getDia(self):
+        return self.__dia
+    def setDia(self, dia):
+        if dia > 0 and dia < 31:
+            self.__dia = dia
+        else:
+            print “Error”
+    dia = property(getDia, setDia)
+ mi_fecha = Fecha()
+ mi_fecha.dia = 33
+
+**Clases de “nuevo-estilo”**
+
+En el ejemplo anterior os habrá llamado la atención el hecho de que la 
+clase Fecha derive de object. La razón de esto es que para poder usar 
+propiedades la clase tiene que ser de “nuevo-estilo”, clases enriquecidas 
+introducidas en Python 2.2 que serán el estándar en Python 3.0 pero 
+que aún conviven con las clases “clásicas” por razones de retrocompa-
+tibilidad. Además de las propiedades las clases de nuevo estilo añaden 
+otras funcionalidades como descriptores o métodos estáticos.
+
+Para que una clase sea de nuevo estilo es necesario, por ahora, que 
+extienda una clase de nuevo-estilo. En el caso de que no sea necesa-
+rio heredar el comportamiento o el estado de ninguna clase, como en 
+nuestro ejemplo anterior, se puede heredar de object, que es un objeto 
+vacio que sirve como base para todas las clases de nuevo estilo.
+
+La diferencia principal entre las clases antiguas y las de nuevo estilo 
+consiste en que a la hora de crear una nueva clase anteriormente no se 
+definía realmente un nuevo tipo, sino que todos los objetos creados a 
+partir de clases, fueran estas las clases que fueran, eran de tipo instan-
+ce.
+
+**Métodos especiales**
+
+Ya vimos al principio del artículo el uso del método __init__. Exis-
+ten otros métodos con significados especiales, cuyos nombres siempre 
+comienzan y terminan con dos guiones bajos. A continuación se listan 
+algunos especialmente útiles.
+
+__init__(self, args)
+Método llamado después de crear el objeto para realizar tareas de 
+inicialización.
+
+__new__(cls, args)
+Método exclusivo de las clases de nuevo estilo que se ejecuta antes que 
+__init__ y que se encarga de construir y devolver el objeto en sí. Es 
+equivalente a los constructores de C++ o Java. Se trata de un método 
+estático, es decir, que existe con independencia de las instancias de 
+la clase: es un método de clase, no de objeto, y por lo tanto el primer 
+parámetro no es self, sino la propia clase: cls.
+
+__del__(self)
+Método llamado cuando el objeto va a ser borrado. También llamado 
+destructor, se utiliza para realizar tareas de limpieza.
+
+__str__(self)
+Método llamado para crear una cadena de texto que represente a nues-
+tro objeto. Se utiliza cuando usamos print para mostrar nuestro objeto 
+o cuando usamos la función str(obj) para crear una cadena a partir de 
+nuestro objeto.
+
+__cmp__(self, otro)
+Método llamado cuando se utilizan los operadores de comparación 
+para comprobar si nuestro objeto es menor, mayor o igual al objeto 
+pasado como parámetro. Debe devolver un número negativo si nuestro 
+objeto es menor, cero si son iguales, y un número positivo si nuestro 
+objeto es mayor. Si este método no está definido y se intenta com-
+parar el objeto mediante los operadores <, <=, > o >= se lanzará una 
+excepción. Si se utilizan los operadores == o != para comprobar si dos 
+objetos son iguales, se comprueba si son el mismo objeto (si tienen el 
+mismo id).
+
+__len__(self)
+Método llamado para comprobar la longitud del objeto. Se utiliza, por 
+ejemplo, cuando se llama a la función len(obj) sobre nuestro objeto. 
+Como es de suponer, el método debe devolver la longitud del objeto.
+
+Existen bastantes más métodos especiales, que permite entre otras 
+cosas utilizar el mecanismo de slicing sobre nuestro objeto, utilizar 
+los operadores aritméticos o usar la sintaxis de diccionarios, pero un 
+estudio exhaustivo de todos los métodos queda fuera del propósito del 
+capítulo.
+
+**evisitando objetos**
+-----------------
+
+En los capítulos dedicados a los tipos simples y las colecciones veíamos 
+por primera vez algunos de los objetos del lenguaje Python: números, 
+booleanos, cadenas de texto, diccionarios, listas y tuplas.
+
+Ahora que sabemos qué son las clases, los objetos, las funciones, y los 
+métodos es el momento de revisitar estos objetos para descubrir su 
+verdadero potencial.
+
+Veremos a continuación algunos métodos útiles de estos objetos. Evi-
+dentemente, no es necesario memorizarlos, pero si, al menos, recordar 
+que existen para cuando sean necesarios.
+
+**Diccionarios**
+
+D.get(k[, d])
+Busca el valor de la clave k en el diccionario. Es equivalente a utilizar 
+D[k] pero al utilizar este método podemos indicar un valor a devolver 
+por defecto si no se encuentra la clave, mientras que con la sintaxis 
+D[k], de no existir la clave se lanzaría una excepción.
+
+D.has_key(k)
+Comprueba si el diccionario tiene la clave k. Es equivalente a la sin-
+taxis k in D.
+
+D.items()
+Devuelve una lista de tuplas con pares clave-valor.
+
+D.keys()
+Devuelve una lista de las claves del diccionario.
+
+D.pop(k[, d])
+Borra la clave k del diccionario y devuelve su valor. Si no se encuentra 
+dicha clave se devuelve d si se especificó el parámetro o bien se lanza 
+una excepción.
+
+D.values()
+Devuelve una lista de los valores del diccionario.
+
+**Cadenas**
+
+S.count(sub[, start[, end]])
+Devuelve el número de veces que se encuentra sub en la cadena. Los 
+parámetros opcionales start y end definen una subcadena en la que 
+buscar.
+
+S.find(sub[, start[, end]])
+Devuelve la posición en la que se encontró por primera vez sub en la 
+cadena o -1 si no se encontró.
+
+S.join(sequence)
+Devuelve una cadena resultante de concatenar las cadenas de la se-
+cuencia seq separadas por la cadena sobre la que se llama el método.
+
+S.partition(sep)
+Busca el separador sep en la cadena y devuelve una tupla con la sub-
+cadena hasta dicho separador, el separador en si, y la subcadena del 
+separador hasta el final de la cadena. Si no se encuentra el separador, la 
+tupla contendrá la cadena en si y dos cadenas vacías.
+
+S.replace(old, new[, count])
+Devuelve una cadena en la que se han reemplazado todas las ocurren-
+cias de la cadena old por la cadena new. Si se especifica el parámetro 
+count, este indica el número máximo de ocurrencias a reemplazar.
+
+S.split([sep [,maxsplit]])
+Devuelve una lista conteniendo las subcadenas en las que se divide 
+nuestra cadena al dividirlas por el delimitador sep. En el caso de que 
