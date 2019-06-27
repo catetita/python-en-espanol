@@ -2338,3 +2338,47 @@ Si lo ejecutamos obtendremos el siguiente mensaje de error:
 
 Lo primero que se muestra es el trazado de pila o traceback, que con-
 siste en una lista con las llamadas que provocaron la excepción. Como 
+vemos en el trazado de pila, el error estuvo causado por la llamada a 
+calcular() de la línea 7, que a su vez llama a division(1, 0) en la 
+línea 5 y en última instancia por la ejecución de la sentencia a / b de 
+la línea 2 de division.
+
+A continuación vemos el tipo de la excepción, ZeroDivisionError, 
+junto a una descripción del error: “integer division or modulo by zero” 
+(módulo o división entera entre cero).
+En Python se utiliza una construcción try-except para capturar y 
+tratar las excepciones. El bloque try (intentar) define el fragmento de 
+código en el que creemos que podría producirse una excepción. El blo-
+que except (excepción) permite indicar el tratamiento que se llevará a 
+cabo de producirse dicha excepción. Muchas veces nuestro tratamiento 
+de la excepción consistirá simplemente en imprimir un mensaje más 
+amigable para el usuario, otras veces nos interesará registrar los errores 
+y de vez en cuando podremos establecer una estrategia de resolución 
+del problema.
+
+En el siguiente ejemplo intentamos crear un objeto f de tipo fichero. 
+De no existir el archivo pasado como parámetro, se lanza una excep-
+ción de tipo IOError, que capturamos gracias a nuestro try-except.
+
+.. code-block:: nim
+
+ try:
+    f = file(“archivo.txt”)
+ except:
+    print “El archivo no existe”
+
+Python permite utilizar varios except para un solo bloque try, de 
+forma que podamos dar un tratamiento distinto a la excepción de-
+pendiendo del tipo de excepción de la que se trate. Esto es una buena 
+práctica, y es tan sencillo como indicar el nombre del tipo a continua-
+ción del except.
+
+.. code-block:: nim
+
+ try:
+    num = int(“3a”)
+    print no_existe
+ except NameError:
+    print “La variable no existe”
+ except ValueError:
+    print “El valor no es un numero”
