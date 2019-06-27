@@ -2151,3 +2151,190 @@ así:
 
 Veamos por último un ejemplo de compresión de listas con varias 
 clausulas for:
+
+.. code-block:: nim
+
+ l = [0, 1, 2, 3]
+ m = [“a”, “b”]
+ n = [s * v for s in m
+           for v in l
+           if v > 0]
+
+Esta construcción sería equivalente a una serie de for-in anidados:
+
+.. code-block:: nim
+
+ l = [0, 1, 2, 3]
+ m = [“a”, “b”]
+ n = []
+ for s in m:
+    for v in l:
+        if v > 0:
+            n.append(s* v)
+
+**Generadores**
+
+Las expresiones generadoras funcionan de forma muy similar a la 
+comprensión de listas. De hecho su sintaxis es exactamente igual, a 
+excepción de que se utilizan paréntesis en lugar de corchetes:
+
+.. code-block:: nim
+
+ l2 = (n ** 2 for n in l)
+ 
+Sin embargo las expresiones generadoras se diferencian de la compren-
+sión de listas en que no se devuelve una lista, sino un generador.
+
+.. code-block:: nim
+
+ >>> l2 = [n ** 2 for n in l]
+ >>> l2
+ [0, 1, 4, 9]
+ >>> l2 = (n ** 2 for n in l)
+ >>> l2
+ <generator object at 0×00E33210>
+
+Un generador es una clase especial de función que genera valores sobre 
+los que iterar. Para devolver el siguiente valor sobre el que iterar se 
+utiliza la palabra clave yield en lugar de return. Veamos por ejemplo 
+un generador que devuelva números de n a m con un salto s.
+
+.. code-block:: nim
+
+ def mi_generador(n, m, s):
+    while(n <= m):
+        yield n
+        n += s
+ >>> x = mi_generador(0, 5, 1)
+ >>> x
+ <generator object at 0×00E25710>
+
+El generador se puede utilizar en cualquier lugar donde se necesite un 
+objeto iterable. Por ejemplo en un for-in:
+
+.. code-block:: nim
+
+ for n in mi_generador(0, 5, 1):
+    print n
+
+Como no estamos creando una lista completa en memoria, sino gene-
+rando un solo valor cada vez que se necesita, en situaciones en las que 
+no sea necesario tener la lista completa el uso de generadores puede 
+suponer una gran diferencia de memoria. En todo caso siempre es po-
+sible crear una lista a partir de un generador mediante la función list:
+
+.. code-block:: nim
+
+ lista = list(mi_generador)
+
+**Decoradores**
+
+Un decorador no es es mas que una función que recibe una función 
+como parámetro y devuelve otra función como resultado. Por ejem-
+plo podríamos querer añadir la funcionalidad de que se imprimiera el 
+nombre de la función llamada por motivos de depuración:
+
+.. code-block:: nim
+
+ def mi_decorador(funcion):
+    def nueva(*args):
+        print “Llamada a la funcion”, funcion.__name__
+        retorno = funcion(*args)
+        return retorno
+    return nueva
+
+Como vemos el código de la función mi_decorador no hace más que 
+crear una nueva función y devolverla. Esta nueva función imprime el 
+nombre de la función a la que “decoramos”, ejecuta el código de dicha 
+función, y devuelve su valor de retorno. Es decir, que si llamáramos 
+a la nueva función que nos devuelve mi_decorador, el resultado sería 
+el mismo que el de llamar directamente a la función que le pasamos 
+como parámetro, exceptuando el que se imprimiría además el nombre 
+de la función.
+
+Supongamos como ejemplo una función imp que no hace otra cosa que 
+mostrar en pantalla la cadena pasada como parámetro.
+
+.. code-block:: nim
+
+ >>> imp(“hola”)
+ hola
+ >>> mi_decorador(imp)(“hola”)
+ Llamada a la función imp
+ hola
+
+La sintaxis para llamar a la función que nos devuelve mi_decorador no 
+es muy clara, aunque si lo estudiamos detenidamente veremos que no 
+tiene mayor complicación. Primero se llama a la función que decora 
+con la función a decorar: mi_decorador(imp); y una vez obtenida la 
+función ya decorada se la puede llamar pasando el mismo parámetro 
+que se pasó anteriormente: mi_decorador(imp)(“hola”)
+
+Esto se podría expresar más claramente precediendo la definición de la 
+función que queremos decorar con el signo @ seguido del nombre de la 
+función decoradora:
+
+.. code-block:: nim
+
+ @mi_decorador
+ def imp(s):
+    print s
+
+De esta forma cada vez que se llame a imp se estará llamando realmen-
+te a la versión decorada. Python incorpora esta sintaxis desde la versión 
+2.4 en adelante.
+
+Si quisiéramos aplicar más de un decorador bastaría añadir una nueva 
+línea con el nuevo decorador.
+
+.. code-block:: nim
+
+ @otro_decorador
+ @mi_decorador
+ def imp(s):
+    print s
+
+Es importante advertir que los decoradores se ejecutarán de abajo a 
+arriba. Es decir, en este ejemplo primero se ejecutaría mi_decorador y 
+después otro_decorador.
+
+**Excepciones**
+-------------
+
+Las excepciones son errores detectados por Python durante la eje-
+cución del programa. Cuando el intérprete se encuentra con una 
+situación excepcional, como el intentar dividir un número entre 0 o 
+el intentar acceder a un archivo que no existe, este genera o lanza una 
+excepción, informando al usuario de que existe algún problema.
+
+Si la excepción no se captura el flujo de ejecución se interrumpe y se 
+muestra la información asociada a la excepción en la consola de forma 
+que el programador pueda solucionar el problema.
+
+Veamos un pequeño programa que lanzaría una excepción al intentar 
+dividir 1 entre 0.
+
+.. code-block:: nim
+
+ def division(a, b):
+    return a / b
+ def calcular():
+    division(1, 0)
+ calcular()
+
+Si lo ejecutamos obtendremos el siguiente mensaje de error:
+
+.. code-block:: nim
+
+ $ python ejemplo.py
+ Traceback (most recent call last):
+ File “ejemplo.py”, line 7, in
+ calcular()
+ File “ejemplo.py”, line 5, in calcular
+ division(1, 0)
+ File “ejemplo.py”, line 2, in division
+ a / b
+ ZeroDivisionError: integer division or modulo by zero
+
+Lo primero que se muestra es el trazado de pila o traceback, que con-
+siste en una lista con las llamadas que provocaron la excepción. Como 
