@@ -585,12 +585,11 @@ escaparlas.
 .. code-block:: nim
 
  triple = “““primera linea
-            esto se vera en otra linea”””
+      esto se vera en otra linea”””
 
 
-Las cadenas también admiten operadores como +, que funciona reali-
-zando una concatenación de las cadenas utilizadas como operandos y 
-*, en la que se repite la cadena tantas veces como lo indique el número 
+Las cadenas también admiten operadores como +, que funciona realizando una concatenación de las cadenas utilizadas como operandos y ,
+en la que se repite la cadena tantas veces como lo indique el número 
 utilizado como segundo operando.
 
 .. code-block:: nim
@@ -1268,7 +1267,7 @@ si se le indica otro valor, será este el que se utilice:
 
 Para definir funciones con un número variable de argumentos coloca-
 mos un último parámetro para la función cuyo nombre debe preceder-
-se de un signo *:
+se de un signo :
 
 .. code-block:: nim
 
@@ -1290,7 +1289,7 @@ que los dos definidos por defecto, por lo tanto no se imprimiría nada.
 En la segunda llamada otros valdría (3, ), y en la tercera (3, 4).
 
 
-También se puede preceder el nombre del último parámetro con **, en 
+También se puede preceder el nombre del último parámetro con * * , en 
 cuyo caso en lugar de una tupla se utilizaría un diccionario. Las claves 
 de este diccionario serían los nombres de los parámetros indicados al 
 llamar a la función y los valores del diccionario, los valores asociados a 
@@ -1666,7 +1665,7 @@ dos con igual nombre según el tipo o número de los parámetros que se
 le pasa. En Python no existe sobrecarga de métodos (el último método 
 sobreescribiría la implementación de los anteriores), aunque se puede 
 conseguir un comportamiento similar recurriendo a funciones con va-
-lores por defecto para los parámetros o a la sintaxis *params o **params 
+lores por defecto para los parámetros o a la sintaxis * params o * * params 
 explicada en el capítulo sobre las funciones en Python, o bien usando 
 decoradores (mecanismo que veremos más adelante).
 
@@ -2064,32 +2063,91 @@ para conservar solo los números que son pares.
  def es_par(n):
     return (n % 2.0 == 0)
  l = [1, 2, 3]
-
 l2 = filter(es_par, l)
-reduce(function, sequence[, initial])
+
+**reduce(function, sequence[, initial])**
+
 La función reduce aplica una función a pares de elementos de una 
 secuencia hasta dejarla en un solo valor.
 A continuación podemos ver un ejemplo en el que se utiliza reduce 
 para sumar todos los elementos de una lista.
-def sumar(x, y):
+
+.. code-block:: nim
+
+ def sumar(x, y):
     return x + y
-l = [1, 2, 3]
-l2 = reduce(sumar, l)
-Funciones lambda
+ l = [1, 2, 3]
+ l2 = reduce(sumar, l)
+
+**Funciones lambda**
+-------------------
+
 El operador lambda sirve para crear funciones anónimas en línea. Al ser 
 funciones anónimas, es decir, sin nombre, estas no podrán ser referen-
 ciadas más tarde.
+
 Las funciones lambda se construyen mediante el operador lambda, los 
 parámetros de la función separados por comas (atención, SIN parénte-
 sis), dos puntos (:) y el código de la función.
+
 Esta construcción podrían haber sido de utilidad en los ejemplos an-
 teriores para reducir código. El programa que utilizamos para explicar 
 filter, por ejemplo, podría expresarse así:
-l = [1, 2, 3]
-l2 = filter(lambda n: n % 2.0 == 0, l)
+
+.. code-block:: nim
+
+ l = [1, 2, 3]
+ l2 = filter(lambda n: n % 2.0 == 0, l)
+
 Comparemoslo con la versión anterior:
-def es_par(n):
+
+.. code-block:: nim
+
+ def es_par(n):
     return (n % 2.0 == 0)
-l = [1, 2, 3]
-l2 = filter(es_par, l)
+ l = [1, 2, 3]
+ l2 = filter(es_par, l)
+
 Las funciones lambda están restringidas por la sintaxis a una sola 
+expresión.
+
+**Comprensión de listas**
+----------------
+
+En Python 3000 map, filter y reduce perderán importancia. Y aun-
+que estas funciones se mantendrán, reduce pasará a formar parte del 
+módulo functools, con lo que quedará fuera de las funciones dispo-
+nibles por defecto, y map y filter se desaconsejarán en favor de las list 
+comprehensions o comprensión de listas.
+
+La comprensión de listas es una característica tomada del lenguaje de 
+programación funcional Haskell que está presente en Python desde la 
+versión 2.0 y consiste en una construcción que permite crear listas a 
+partir de otras listas.
+
+Cada una de estas construcciones consta de una expresión que deter-
+mina cómo modificar el elemento de la lista original, seguida de una o 
+varias clausulas for y opcionalmente una o varias clausulas if.
+Veamos un ejemplo de cómo se podría utilizar la comprensión de listas 
+para elevar al cuadrado todos los elementos de una lista, como hicimos 
+en nuestro ejemplo de map.
+
+.. code-block:: nim
+
+ l2 = [n ** 2 for n in l]
+
+Esta expresión se leería como “para cada n en l haz n ** 2”. Como 
+vemos tenemos primero la expresión que modifica los valores de la lista 
+original (n ** 2), después el for, el nombre que vamos a utilizar para 
+referirnos al elemento actual de la lista original, el in, y la lista sobre la 
+que se itera.
+
+El ejemplo que utilizamos para la función filter (conservar solo los 
+números que son pares) se podría expresar con comprensión de listas 
+así:
+.. code-block:: nim
+
+ l2 = [n for n in l if n % 2.0 == 0]
+
+Veamos por último un ejemplo de compresión de listas con varias 
+clausulas for:
