@@ -2435,3 +2435,41 @@ class MiError(Exception):
 
     def __init__(self, valor):
         self.valor = valor
+
+    def __str__(self):
+        return “Error “ + str(self.valor)
+ try:
+    if resultado > 20:
+        raise MiError(33)
+ except MiError, e:
+    print e
+
+Por último, a continuación se listan a modo de referencia las excepcio-
+nes disponibles por defecto, así como la clase de la que deriva cada una 
+de ellas entre paréntesis.
+
+BaseException: Clase de la que heredan todas las excepciones.
+Exception(BaseException): Super clase de todas las excepciones que 
+no sean de salida.
+
+GeneratorExit(Exception): Se pide que se salga de un generador.
+
+StandardError(Exception): Clase base para todas las excepciones que 
+no tengan que ver con salir del intérprete.
+
+ArithmeticError(StandardError): Clase base para los errores aritmé-
+ticos.
+
+FloatingPointError(ArithmeticError): Error en una operación de 
+coma flotante.
+
+OverflowError(ArithmeticError): Resultado demasiado grande para 
+poder representarse.
+
+ZeroDivisionError(ArithmeticError): Lanzada cuando el segundo 
+argumento de una operación de división o módulo era 0.
+
+AssertionError(StandardError): Falló la condición de un estamento 
+assert.
+
+AttributeError(StandardError): No se encontró el atributo.
