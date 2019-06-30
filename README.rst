@@ -2382,3 +2382,56 @@ ción del except.
     print “La variable no existe”
  except ValueError:
     print “El valor no es un numero”
+
+Cuando se lanza una excepción en el bloque try, se busca en cada una 
+de las clausulas except un manejador adecuado para el tipo de error 
+que se produjo. En caso de que no se encuentre, se propaga la excep-
+ción.
+
+Además podemos hacer que un mismo except sirva para tratar más 
+de una excepción usando una tupla para listar los tipos de error que 
+queremos que trate el bloque:
+
+.. code-block:: nim
+
+ try:
+    num = int(“3a”)
+    print no_existe
+ except (NameError, ValueError):
+    print “Ocurrio un error”
+
+La construcción try-except puede contar además con una clausula 
+else, que define un fragmento de código a ejecutar sólo si no se ha 
+producido ninguna excepción en el try.
+
+.. code-block:: nim
+
+ try:
+    num = 33
+ except:
+    print “Hubo un error!”
+ else:
+    print “Todo esta bien”
+
+También existe una clausula finally que se ejecuta siempre, se pro-
+duzca o no una excepción. Esta clausula se suele utilizar, entre otras 
+cosas, para tareas de limpieza.
+
+.. code-block:: nim
+
+ try:
+    z = x / y
+ except ZeroDivisionError:
+    print “Division por cero”
+ finally:
+    print “Limpiando”
+
+También es interesante comentar que como programadores podemos 
+crear y lanzar nuestras propias excepciones. Basta crear una clase que 
+herede de Exception o cualquiera de sus hijas y lanzarla con raise.
+class MiError(Exception):
+
+.. code-block:: nim
+
+    def __init__(self, valor):
+        self.valor = valor
