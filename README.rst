@@ -2473,3 +2473,82 @@ AssertionError(StandardError): Falló la condición de un estamento
 assert.
 
 AttributeError(StandardError): No se encontró el atributo.
+
+EOFError(StandardError): Se intentó leer más allá del final de fichero.
+
+EnvironmentError(StandardError): Clase padre de los errores relacio-
+nados con la entrada/salida.
+
+IOError(EnvironmentError): Error en una operación de entrada/salida.
+
+OSError(EnvironmentError): Error en una llamada a sistema.
+
+WindowsError(OSError): Error en una llamada a sistema en Windows.
+
+ImportError(StandardError): No se encuentra el módulo o el elemen-
+to del módulo que se quería importar.
+
+LookupError(StandardError): Clase padre de los errores de acceso.
+
+IndexError(LookupError): El índice de la secuencia está fuera del 
+rango posible.
+
+KeyError(LookupError): La clave no existe.
+
+MemoryError(StandardError): No queda memoria suficiente.
+
+NameError(StandardError): No se encontró ningún elemento con ese 
+nombre.
+
+UnboundLocalError(NameError): El nombre no está asociado a ninguna 
+variable.
+
+ReferenceError(StandardError): El objeto no tiene ninguna referen-
+cia fuerte apuntando hacia él.
+
+RuntimeError(StandardError): Error en tiempo de ejecución no espe-
+cificado.
+
+NotImplementedError(RuntimeError): Ese método o función no está 
+implementado.
+
+SyntaxError(StandardError): Clase padre para los errores sintácticos.
+
+IndentationError(SyntaxError): Error en la indentación del archivo.
+
+TabError(IndentationError): Error debido a la mezcla de espacios y 
+tabuladores.
+
+SystemError(StandardError): Error interno del intérprete.
+
+TypeError(StandardError): Tipo de argumento no apropiado.
+
+ValueError(StandardError): Valor del argumento no apropiado.
+
+UnicodeError(ValueError): Clase padre para los errores relacionados 
+con unicode.
+
+UnicodeDecodeError(UnicodeError): Error de decodificación unicode.
+
+UnicodeEncodeError(UnicodeError): Error de codificación unicode.
+
+UnicodeTranslateError(UnicodeError): Error de traducción unicode.
+
+StopIteration(Exception): Se utiliza para indicar el final del iterador.
+
+Warning(Exception): Clase padre para los avisos.
+
+DeprecationWarning(Warning): Clase padre para avisos sobre caracte-
+rísticas obsoletas.
+
+FutureWarning(Warning): Aviso. La semántica de la construcción cam-
+biará en un futuro.
+
+ImportWarning(Warning): Aviso sobre posibles errores a la hora de 
+importar.
+
+PendingDeprecationWarning(Warning): Aviso sobre características que 
+se marcarán como obsoletas en un futuro próximo.
+
+RuntimeWarning(Warning): Aviso sobre comportmaientos dudosos en 
+tiempo de ejecución.
