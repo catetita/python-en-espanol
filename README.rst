@@ -2719,12 +2719,238 @@ Como los modulos, para importar paquetes también se utiliza import
 y from-import y el caracter . para separar paquetes, subpaquetes y 
 módulos.
 
-import paq.subpaq.modulo
-paq.subpaq.modulo.func()
+.. code-block:: nim
+
+ import paq.subpaq.modulo
+ paq.subpaq.modulo.func()
 
 A lo largo de los próximos capítulos veremos algunos módulos y pa-
 quetes de utilidad. Para encontrar algún módulo o paquete que cubra 
 una cierta necesidad, puedes consultar la lista de PyPI (Python Pac-
 kage Index) en http://pypi.python.org/, que cuenta a la hora de escribir 
+estas líneas, con más de 4000 paquetes distintos.
 
+**entrada/salida y fiCheros**
+---------
 
+Nuestros programas serían de muy poca utilidad si no fueran capaces 
+de interaccionar con el usuario. En capítulos anteriores vimos, de pasa-
+da, el uso de la palabra clave print para mostrar mensajes en pantalla.
+En esta lección, además de describir más detalladamente del uso de 
+print para mostrar mensajes al usuario, aprenderemos a utilizar las 
+funciones input y raw_input para pedir información, así como los 
+argumentos de línea de comandos y, por último, la entrada/salida de 
+ficheros.
+
+**Entrada estándar**
+
+La forma más sencilla de obtener información por parte del usuario 
+es mediante la función raw_input. Esta función toma como paráme-
+tro una cadena a usar como prompt (es decir, como texto a mostrar al 
+usuario pidiendo la entrada) y devuelve una cadena con los caracteres 
+introducidos por el usuario hasta que pulsó la tecla Enter. Veamos un 
+pequeño ejemplo:
+
+.. code-block:: nim
+
+ nombre = raw_input(“Como te llamas? “)
+ print “Encantado, “ + nombre
+
+Si necesitáramos un entero como entrada en lugar de una cadena, por 
+ejemplo, podríamos utilizar la función int para convertir la cadena a 
+entero, aunque sería conveniente tener en cuenta que puede lanzarse 
+una excepción si lo que introduce el usuario no es un número.
+
+.. code-block:: nim
+
+ try:
+    edad = raw_input(“Cuantos anyos tienes? “)
+    dias = int(edad) * 365
+    print “Has vivido “ + str(dias) + “ dias”
+ except ValueError:
+    print “Eso no es un numero”
+
+La función input es un poco más complicada. Lo que hace esta fun-
+ción es utilizar raw_input para leer una cadena de la entrada estándar, 
+y después pasa a evaluarla como si de código Python se tratara; por lo 
+tanto input debería tratarse con sumo cuidado.
+
+**Parámetros de línea de comando**
+
+Además del uso de input y raw_input el programador Python cuen-
+ta con otros métodos para obtener datos del usuario. Uno de ellos es 
+el uso de parámetros a la hora de llamar al programa en la línea de 
+comandos. Por ejemplo:
+
+.. code-block:: nim
+
+ python editor.py hola.txt
+
+En este caso hola.txt sería el parámetro, al que se puede acceder a 
+través de la lista sys.argv, aunque, como es de suponer, antes de poder 
+utilizar dicha variable debemos importar el módulo sys. sys.argv[0] 
+contiene siempre el nombre del programa tal como lo ha ejecutado el 
+usuario, sys.argv[1], si existe, sería el primer parámetro; sys.argv[2] 
+el segundo, y así sucesivamente.
+
+.. code-block:: nim
+
+ import sys
+ if(len(sys.argv) > 1):
+    print “Abriendo “ + sys.argv[1]
+ else:
+    print “Debes indicar el nombre del archivo”
+
+Existen módulos, como optparse, que facilitan el trabajo con los argu-
+mentos de la línea de comandos, pero explicar su uso queda fuera del 
+objetivo de este capítulo.
+
+**Salida estándar**
+
+La forma más sencilla de mostrar algo en la salida estándar es median-
+te el uso de la sentencia print, como hemos visto multitud de veces en 
+ejemplos anteriores. En su forma más básica a la palabra clave print le 
+sigue una cadena, que se mostrará en la salida estándar al ejecutarse el 
+estamento.
+
+.. code-block:: nim
+
+ >>> print “Hola mundo”
+ Hola mundo
+
+Después de imprimir la cadena pasada como parámetro el puntero se 
+sitúa en la siguiente línea de la pantalla, por lo que el print de Python 
+funciona igual que el println de Java.
+
+En algunas funciones equivalentes de otros lenguajes de programación 
+es necesario añadir un carácter de nueva línea para indicar explícita-
+mente que queremos pasar a la siguiente línea. Este es el caso de la 
+función printf de C o la propia función print de Java.
+
+Ya explicamos el uso de estos caracteres especiales durante la explica-
+ción del tipo cadena en el capítulo sobre los tipos básicos de Python. 
+La siguiente sentencia, por ejemplo, imprimiría la palabra “Hola”, 
+seguida de un renglón vacío (dos caracteres de nueva línea, ‘\n’), y 
+a continuación la palabra “mundo” indentada (un carácter tabulador, 
+‘\t’).
+
+.. code-block:: nim
+
+ print “Hola\n\n\tmundo”
+
+Para que la siguiente impresión se realizara en la misma línea tendría-
+mos que colocar una coma al final de la sentencia. Comparemos el 
+resultado de este código:
+
+.. code-block:: nim
+
+ >>> for i in range(3):
+ >>> ...print i,
+ 0 1 2
+
+Con el de este otro, en el que no utiliza una coma al final de la senten-
+cia:
+
+.. code-block:: nim
+
+ >>> for i in range(3):
+ >>> ...print i
+ 0
+ 1
+ 2
+
+Este mecanismo de colocar una coma al final de la sentencia funcio-
+na debido a que es el símbolo que se utiliza para separar cadenas que 
+queramos imprimir en la misma línea.
+
+.. code-block:: nim
+
+ >>> print “Hola”, “mundo”
+ Hola mundo
+
+Esto se diferencia del uso del operador + para concatenar las cadenas 
+en que al utilizar las comas print introduce automáticamente un espa-
+cio para separar cada una de las cadenas. Este no es el caso al utilizar 
+el operador +, ya que lo que le llega a print es un solo argumento: una 
+cadena ya concatenada.
+
+.. code-block:: nim
+ >>> print “Hola” + “mundo”
+ Holamundo
+
+Además, al utilizar el operador + tendríamos que convertir antes cada 
+argumento en una cadena de no serlo ya, ya que no es posible concate-
+nar cadenas y otros tipos, mientras que al usar el primer método no es 
+necesaria la conversión.
+
+.. code-block:: nim
+
+ >>> print “Cuesta”, 3, “euros”
+ Cuesta 3 euros
+ >>> print “Cuesta” + 3 + “euros”
+ <type ‘exceptions.TypeError’>: cannot concatenate ‘str’ and 
+ ‘int’ objects
+
+La sentencia print, o más bien las cadenas que imprime, permiten 
+también utilizar técnicas avanzadas de formateo, de forma similar al 
+sprintf de C. Veamos un ejemplo bastante simple:
+
+.. code-block:: nim
+
+ print “Hola %s” % “mundo”
+ print “%s %s” % (“Hola”, “mundo”)
+
+Lo que hace la primera línea es introducir los valores a la derecha del 
+símbolo % (la cadena “mundo”) en las posiciones indicadas por los espe-
+cificadores de conversión de la cadena a la izquierda del símbolo %, tras 
+convertirlos al tipo adecuado.
+
+En la segunda línea, vemos cómo se puede pasar más de un valor a 
+sustituir, por medio de una tupla.
+
+En este ejemplo sólo tenemos un especificador de conversión: %s.
+Los especificadores más sencillos están formados por el símbolo % 
+seguido de una letra que indica el tipo con el que formatear el valor 
+Por ejemplo:
+
+============= ==============
+Especificador  Formato
+============= ==============
+%s             Cadena
+%d             Entero
+%o             Octal
+%x             Hexadecimal
+%f             Real
+============= ==============
+
+Se puede introducir un número entre el % y el carácter que indica el 
+tipo al que formatear, indicando el número mínimo de caracteres que 
+queremos que ocupe la cadena. Si el tamaño de la cadena resultante 
+es menor que este número, se añadirán espacios a la izquierda de la 
+cadena. En el caso de que el número sea negativo, ocurrirá exactamente 
+lo mismo, sólo que los espacios se añadirán a la derecha de la cadena.
+
+.. code-block:: nim
+
+ >>> print “%10s mundo” % “Hola”
+ ______Hola mundo
+ >>> print “%-10s mundo” % “Hola”
+ Hola_______mundo
+
+En el caso de los reales es posible indicar la precisión a utilizar prece-
+diendo la f de un punto seguido del número de decimales que quere-
+mos mostrar:
+
+.. code-block:: nim
+
+ >>> from math import pi
+ >>> print “%.4f” % pi
+ 3.1416
+
+La misma sintaxis se puede utilizar para indicar el número de caracte-
+res de la cadena que queremos mostrar
+
+.. code-block:: nim
+
+ >>> print “%.4s” % “hola mundo”
+ hola
