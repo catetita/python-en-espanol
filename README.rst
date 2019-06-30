@@ -2566,3 +2566,38 @@ por el usuario.
 
 SystemExit(BaseException): Petición del intérprete para terminar la 
 ejecución.
+
+Módulos y paquetes
+
+**modulos**
+
+Para facilitar el mantenimiento y la lectura los programas demasiado 
+largos pueden dividirse en módulos, agrupando elementos relaciona-
+dos. Los módulos son entidades que permiten una organización y divi-
+sión lógica de nuestro código. Los ficheros son su contrapartida física: 
+cada archivo Python almacenado en disco equivale a un módulo.
+
+Vamos a crear nuestro primer módulo entonces creando un pequeño 
+archivo modulo.py con el siguiente contenido:
+
+.. code-block:: nim
+
+ def mi_funcion():
+    print “una funcion”
+ class MiClase:
+    def __init__(self):
+        print “una clase”
+ print “un modulo”
+
+Si quisiéramos utilizar la funcionalidad definida en este módulo en 
+nuestro programa tendríamos que importarlo. Para importar un mó-
+dulo se utiliza la palabra clave import seguida del nombre del módulo, 
+que consiste en el nombre del archivo menos la extensión. Como ejem-
+plo, creemos un archivo programa.py en el mismo directorio en el que 
+guardamos el archivo del módulo (esto es importante, porque si no se 
+encuentra en el mismo directorio Python no podrá encontrarlo), con el 
+siguiente contenido:
+
+.. code-block:: nim
+
+ import modul
