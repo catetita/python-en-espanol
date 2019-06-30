@@ -2954,3 +2954,235 @@ res de la cadena que queremos mostrar
 
  >>> print “%.4s” % “hola mundo”
  hola
+
+**Archivos**
+
+Los ficheros en Python son objetos de tipo file creados mediante la 
+función open (abrir). Esta función toma como parámetros una cadena 
+con la ruta al fichero a abrir, que puede ser relativa o absoluta; una 
+cadena opcional indicando el modo de acceso (si no se especifica se 
+accede en modo lectura) y, por último, un entero opcional para especi-
+ficar un tamaño de buffer distinto del utilizado por defecto.
+El modo de acceso puede ser cualquier combinación lógica de los 
+siguientes modos:
+
+* ‘r’: read, lectura. Abre el archivo en modo lectura. El archivo tiene 
+que existir previamente, en caso contrario se lanzará una excepción 
+de tipo IOError.
+
+* ‘w’: write, escritura. Abre el archivo en modo escritura. Si el archi-
+vo no existe se crea. Si existe, sobreescribe el contenido.
+
+* ‘a’: append, añadir. Abre el archivo en modo escritura. Se diferen-
+cia del modo ‘w’ en que en este caso no se sobreescribe el conteni-
+do del archivo, sino que se comienza a escribir al final del archivo.
+
+* ‘b’: binary, binario.
+
+* ‘+’: permite lectura y escritura simultáneas.
+
+* ‘U’: universal newline, saltos de línea universales. Permite trabajar 
+con archivos que tengan un formato para los saltos de línea que no 
+coincide con el de la plataforma actual (en Windows se utiliza el 
+caracter CR LF, en Unix LF y en Mac OS CR).
+
+.. code-block:: nim
+
+ f = open(“archivo.txt”, “w”)
+
+Tras crear el objeto que representa nuestro archivo mediante la función 
+open podremos realizar las operaciones de lectura/escritura pertinen-
+tes utilizando los métodos del objeto que veremos en las siguientes 
+secciones.
+
+Una vez terminemos de trabajar con el archivo debemos cerrarlo utili-
+zando el método close.
+
+**Lectura de archivos**
+
+Para la lectura de archivos se utilizan los métodos read, readline y 
+realines.
+
+El método read devuelve una cadena con el contenido del archivo o 
+bien el contenido de los primeros n bytes, si se especifica el tamaño 
+máximo a leer.
+
+.. code-block:: nim
+
+ completo = f.read()
+ parte = f2.read(512)
+
+El método readline sirve para leer las líneas del fichero una por una. 
+Es decir, cada vez que se llama a este método, se devuelve el conteni-
+do del archivo desde el puntero hasta que se encuentra un carácter de 
+nueva línea, incluyendo este carácter.
+
+.. code-block:: nim
+
+ while True:
+      linea = f.readline()
+      if not linea: break
+      print linea
+
+
+Por último, readlines, funciona leyendo todas las líneas del archivo y 
+devolviendo una lista con las líneas leídas.
+
+**Escritura de archivos**
+
+Para la escritura de archivos se utilizan los método write y writelines. 
+Mientras el primero funciona escribiendo en el archivo una cadena de 
+texto que toma como parámetro, el segundo toma como parámetro una 
+lista de cadenas de texto indicando las líneas que queremos escribir en 
+el fichero.
+
+**Mover el puntero de lectura/escritura**
+
+Hay situaciones en las que nos puede interesar mover el puntero de 
+lectura/escritura a una posición determinada del archivo. Por ejemplo 
+si queremos empezar a escribir en una posición determinada y no al 
+final o al principio del archivo.
+
+Para esto se utiliza el método seek que toma como parámetro un nú-
+mero positivo o negativo a utilizar como desplazamiento. También es 
+posible utilizar un segundo parámetro para indicar desde dónde quere-
+mos que se haga el desplazamiento: 0 indicará que el desplazamiento 
+se refiere al principio del fichero (comportamiento por defecto), 1 se 
+refiere a la posición actual, y 2, al final del fichero.
+
+Para determinar la posición en la que se encuentra actualmente el 
+puntero se utiliza el método tell(), que devuelve un entero indicando 
+la distancia en bytes desde el principio del fichero.
+
+**expresiones regulares**
+-----------
+
+Las expresiones regulares, también llamadas regex o regexp, consisten 
+en patrones que describen conjuntos de cadenas de caracteres.
+
+Algo parecido sería escribir en la línea de comandos de Windows
+
+.. code-block:: nim
+
+ dir *.exe
+
+‘*.exe’ sería una “expresión regular” que describiría todas las cadenas 
+de caracteres que empiezan con cualquier cosa seguida de ‘.exe’, es 
+decir, todos los archivos exe.
+
+El trabajo con expresiones regulares en Python se realiza mediante el 
+módulo re, que data de Python 1.5 y que proporciona una sintaxis para 
+la creación de patrones similar a la de Perl. En Python 1.6 el módulo 
+se reescribió para dotarlo de soporte de cadenas unicode y mejorar su 
+rendimiento.
+
+El módulo re contiene funciones para buscar patrones dentro de una 
+cadena (search), comprobar si una cadena se ajusta a un determinado 
+criterio descrito mediante un patrón (match), dividir la cadena usando 
+las ocurrencias del patrón como puntos de ruptura (split) o para sus-
+tituir todas las ocurrencias del patrón por otra cadena (sub). Veremos 
+estas funciones y alguna más en la próxima sección, pero por ahora, 
+aprendamos algo más sobre la sintaxis de las expresiones regulares.
+
+**patrones**
+
+La expresión regular más sencilla consiste en una cadena simple, que
+describe un conjunto compuesto tan solo por esa misma cadena. Por 
+ejemplo, veamos cómo la cadena “python” coincide con la expresión 
+regular “python” usando la función match:
+
+.. code-block:: nim
+
+ import re
+ if re.match(“python”, “python”):
+   print “cierto”
+
+Si quisiéramos comprobar si la cadena es “python”,  “jython”, 
+“cython” o cualquier otra cosa que termine en “ython”, podríamos 
+utilizar el carácter comodín, el punto ‘.’:
+
+.. code-block:: nim
+
+ re.match(“.ython”, “python”)
+ re.match(“.ython”, “jython”)
+
+La expresión regular “.ython” describiría a todas las cadenas que con-
+sistan en un carácter cualquiera, menos el de nueva línea, seguido de 
+“ython”. Un carácter cualquiera y solo uno. No cero, ni dos, ni tres.
+En el caso de que necesitáramos el carácter ‘.’ en la expresión regular, 
+o cualquier otro de los caracteres especiales que veremos a continua-
+ción, tendríamos que escaparlo utilizando la barra invertida.
+
+Para comprobar si la cadena consiste en 3 caracteres seguidos de un 
+punto, por ejemplo, podríamos utilizar lo siguiente:
+
+.. code-block:: nim
+
+ re.match(“...\.”, “abc.”)
+
+Si necesitáramos una expresión que sólo resultara cierta para las cade-
+nas “python”, “jython” y “cython” y ninguna otra, podríamos utilizar 
+el carácter ‘|’ para expresar alternativa escribiendo los tres subpatro-
+nes completos:
+
+.. code-block:: nim
+
+ re.match(“python|jython|cython”, “python”)
+
+o bien tan solo la parte que pueda cambiar, encerrada entre paréntesis, 
+formando lo que se conoce como un grupo. Los grupos tienen una 
+gran importancia a la hora de trabajar con expresiones regulares y este 
+no es su único uso, como veremos en la siguiente sección.
+
+.. code-block:: nim
+
+ re.match(“(p|j|c)ython”, “python”)
+
+Otra opción consistiría en encerrar los caracteres ‘p’, ‘j’ y ‘c’ entre 
+corchetes para formar una clase de caracteres, indicando que en esa po-
+sición puede colocarse cualquiera de los caracteres de la clase.
+
+.. code-block:: nim
+
+ re.match(“[pjc]ython”, “python”)
+
+¿Y si quisiéramos comprobar si la cadena es “python0”, “python1”, 
+“python2”, ... , “python9”? En lugar de tener que encerrar los 10 dígitos 
+dentro de los corchetes podemos utilizar el guión, que sirve para indi-
+car rangos. Por ejemplo a-d indicaría todas las letras minúsculas de la 
+‘a’ a la ‘d’; 0-9 serían todos los números de 0 a 9 inclusive.
+
+.. code-block:: nim
+
+ re.match(“python[0-9]”, “python0”)
+
+Si quisiéramos, por ejemplo, que el último carácter fuera o un dígito o 
+una letra simplemente se escribirían dentro de los corchetes todos los 
+criterios, uno detras de otro.
+
+.. code-block:: nim
+
+ re.match(“python[0-9a-zA-Z]”, “pythonp”)
+
+Es necesario advertir que dentro de las clases de caracteres los caracte-
+res especiales no necesitan ser escapados. Para comprobar si la cadena 
+es “python.” o “python,”, entonces, escribiríamos:
+
+.. code-block:: nim
+
+ re.match(“python[.,]”, “python.”)
+
+y no
+
+.. code-block:: nim
+
+ re.match(“python[\.,]”, “python.”)
+
+ya que en este último caso estaríamos comprobando si la cadena es 
+“python.”, “python,” o “python\”.
+
+Los conjuntos de caracteres también se pueden negar utilizando el 
+símbolo ‘^’. La expresión “python[^0-9a-z]”, por ejemplo, indicaría 
+que nos interesan las cadenas que comiencen por “python” y tengan 
+como último carácter algo que no sea ni una letra minúscula ni un 
+número.
