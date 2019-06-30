@@ -2567,7 +2567,8 @@ por el usuario.
 SystemExit(BaseException): Petición del intérprete para terminar la 
 ejecución.
 
-Módulos y paquetes
+**Módulos y paquetes**
+--------
 
 **modulos**
 
@@ -2601,3 +2602,129 @@ siguiente contenido:
 .. code-block:: nim
 
  import modul
+ modulo.mi_funcion()
+
+El import no solo hace que tengamos disponible todo lo definido 
+dentro del módulo, sino que también ejecuta el código del módulo. Por 
+esta razón nuestro programa, además de imprimir el texto “una fun-
+cion” al llamar a mi_funcion, también imprimiría el texto “un modulo”, 
+debido al print del módulo importado. No se imprimiría, no obstante, 
+el texto “una clase”, ya que lo que se hizo en el módulo fue tan solo 
+definir de la clase, no instanciarla.
+
+La clausula import también permite importar varios módulos en la 
+misma línea. En el siguiente ejemplo podemos ver cómo se importa 
+con una sola clausula import los módulos de la distribución por defecto 
+de Python os, que engloba funcionalidad relativa al sistema operativo; 
+sys, con funcionalidad relacionada con el propio intérprete de Python 
+y time, en el que se almacenan funciones para manipular fechas y 
+horas.
+
+.. code-block:: nim
+
+ import os, sys, time
+ print time.asctime()
+
+Sin duda os habréis fijado en este y el anterior ejemplo en un detalle 
+importante, y es que, como vemos, es necesario preceder el nombre de 
+los objetos que importamos de un módulo con el nombre del módulo 
+al que pertenecen, o lo que es lo mismo, el espacio de nombres en el 
+que se encuentran. Esto permite que no sobreescribamos accidental-
+mente algún otro objeto que tuviera el mismo nombre al importar otro 
+módulo.
+
+Sin embargo es posible utilizar la construcción from-import para 
+ahorrarnos el tener que indicar el nombre del módulo antes del objeto 
+que nos interesa. De esta forma se importa el objeto o los objetos que 
+indiquemos al espacio de nombres actual.
+
+.. code-block:: nim
+
+ from time import asctime
+ print asctime()
+
+Aunque se considera una mala práctica, también es posible importar 
+todos los nombres del módulo al espacio de nombres actual usando el 
+caracter *:
+
+.. code-block:: nim
+
+ from time import *
+
+Ahora bien, recordareis que a la hora de crear nuestro primer módulo 
+insistí en que lo guardarais en el mismo directorio en el que se en-
+contraba el programa que lo importaba. Entonces, ¿cómo podemos 
+importar los módulos os, sys o time si no se encuentran los archivos 
+os.py, sys.py y time.py en el mismo directorio?
+
+A la hora de importar un módulo Python recorre todos los directorios 
+indicados en la variable de entorno PYTHONPATH en busca de un archivo 
+con el nombre adecuado. El valor de la variable PYTHONPATH se puede 
+consultar desde Python mediante sys.path
+
+.. code-block:: nim
+
+ >>> import sys
+ >>> sys.path
+
+De esta forma para que nuestro módulo estuviera disponible para 
+todos los programas del sistema bastaría con que lo copiáramos a uno 
+de los directorios indicados en PYTHONPATH.
+
+En el caso de que Python no encontrara ningún módulo con el nom-
+bre especificado, se lanzaría una excepción de tipo ImportError.
+
+Por último es interesante comentar que en Python los módulos 
+también son objetos; de tipo module en concreto. Por supuesto esto 
+significa que pueden tener atributos y métodos. Uno de sus atributos, 
+__name__, se utiliza a menudo para incluir código ejecutable en un 
+módulo pero que este sólo se ejecute si se llama al módulo como pro-
+grama, y no al importarlo. Para lograr esto basta saber que cuando se 
+ejecuta el módulo directamente __name__ tiene como valor “__main__”, 
+mientras que cuando se importa, el valor de __name__ es el nombre del 
+módulo:
+
+.. code-block:: nim
+
+ print “Se muestra siempre”
+ if __name__ == “__main__”:
+    print “Se muestra si no es importacion”
+
+Otro atributo interesante es __doc__, que, como en el caso de fun-
+ciones y clases, sirve a modo de documentación del objeto (docstring 
+o cadena de documentación). Su valor es el de la primera línea del 
+cuerpo del módulo, en el caso de que esta sea una cadena de texto; en 
+caso contrario valdrá None.
+
+**Paquetes**
+
+Si los módulos sirven para organizar el código, los paquetes sirven para 
+organizar los módulos. Los paquetes son tipos especiales de módulos 
+(ambos son de tipo module) que permiten agrupar módulos relacio-
+nados. Mientras los módulos se corresponden a nivel físico con los 
+archivos, los paquetes se representan mediante directorios.
+En una aplicación cualquiera podríamos tener, por ejemplo, un paque-
+te iu para la interfaz o un paquete bbdd para la persistencia a base de 
+datos.
+
+Para hacer que Python trate a un directorio como un paquete es nece-
+sario crear un archivo __init__.py en dicha carpeta. En este archivo se 
+pueden definir elementos que pertenezcan a dicho paquete, como una 
+constante DRIVER para el paquete bbdd, aunque habitualmente se trata-
+rá de un archivo vacío. Para hacer que un cierto módulo se encuentre 
+dentro de un paquete, basta con copiar el archivo que define el módulo 
+al directorio del paquete.
+
+Como los modulos, para importar paquetes también se utiliza import 
+y from-import y el caracter . para separar paquetes, subpaquetes y 
+módulos.
+
+import paq.subpaq.modulo
+paq.subpaq.modulo.func()
+
+A lo largo de los próximos capítulos veremos algunos módulos y pa-
+quetes de utilidad. Para encontrar algún módulo o paquete que cubra 
+una cierta necesidad, puedes consultar la lista de PyPI (Python Pac-
+kage Index) en http://pypi.python.org/, que cuenta a la hora de escribir 
+
+
