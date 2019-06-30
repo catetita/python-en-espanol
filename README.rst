@@ -2552,3 +2552,17 @@ se marcarán como obsoletas en un futuro próximo.
 
 RuntimeWarning(Warning): Aviso sobre comportmaientos dudosos en 
 tiempo de ejecución.
+
+SyntaxWarning(Warning): Aviso sobre sintaxis dudosa.
+
+UnicodeWarning(Warning): Aviso sobre problemas relacionados con 
+Unicode, sobre todo con problemas de conversión.
+
+UserWarning(Warning): Clase padre para avisos creados por el progra-
+mador.
+
+KeyboardInterrupt(BaseException): El programa fué interrumpido 
+por el usuario.
+
+SystemExit(BaseException): Petición del intérprete para terminar la 
+ejecución.
