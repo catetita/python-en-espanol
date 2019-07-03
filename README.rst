@@ -3229,3 +3229,89 @@ Finalmente las llaves sirven para indicar el número de veces exacto que
 puede aparecer el carácter de la izquierda, o bien un rango de veces que 
 puede aparecer. Por ejemplo {3} indicaría que tiene que aparecer exac-
 tamente 3 veces, {3,8} indicaría que tiene que aparecer de 3 a 8 veces, 
+{,8} de 0 a 8 veces y {3,} tres veces o mas (las que sean).
+
+Otro elemento interesante en las expresiones regulares, para terminar, 
+es la especificación de las posiciones en que se tiene que encontrar la 
+cadena, esa es la utilidad de ^ y $, que indican, respectivamente, que el 
+elemento sobre el que actúan debe ir al principio de la cadena o al final 
+de esta.
+
+La cadena “http://mundogeek.net”, por ejemplo, se ajustaría a la 
+expresión regular “^http”, mientras que la cadena “El protocolo es 
+http” no lo haría, ya que el http no se encuentra al principio de la 
+cadena.
+
+**Usando el módulo re**
+
+Ya hemos visto por encima cómo se utiliza la función match del módu-
+lo re para comprobar si una cadena se ajusta a un determinado patrón. 
+El primer parámetro de la función es la expresión regular, el segundo, 
+la cadena a comprobar y existe un tercer parámetro opcional que con-
+tiene distintos flags que se pueden utilizar para modificar el comporta-
+miento de las expresiones regulares.
+
+Algunos ejemplos de flags del módulo re son re.IGNORECASE, que hace 
+que no se tenga en cuenta si las letras son mayúsculas o minúsculas o 
+re.VERBOSE, que hace que se ignoren los espacios y los comentarios en 
+la cadena que representa la expresión regular.
+
+El valor de retorno de la función será None en caso de que la cadena no 
+se ajuste al patrón o un objeto de tipo MatchObject en caso contrario. 
+Este objeto MatchObject cuenta con métodos start y end que devuel-
+ven la posición en la que comienza y finaliza la subcadena reconocida y 
+métodos group y groups que permiten acceder a los grupos que propi-
+ciaron el reconocimiento de la cadena.
+
+Al llamar al método group sin parámetros se nos devuelve el grupo 0 
+de la cadena reconocida. El grupo 0 es la subcadena reconocida por 
+la expresión regular al completo, aunque no existan paréntesis que 
+delimiten el grupo.
+
+.. code-block:: nim
+
+ >>> mo = re.match(“http://.+\net”, “http://mundogeek.net”)
+ >>> print mo.group()
+ http://mundogeek.net
+
+Podríamos crear grupos utilizando los paréntesis, como aprendimos 
+en la sección anterior, obteniendo así la parte de la cadena que nos 
+interese.
+
+.. code-block:: nim
+
+ >>> mo = re.match(“http://(.+)\net”, “http://mundogeek.net”)
+ >>> print mo.group(0)
+ http://mundogeek.net
+ >>> print mo.group(1)
+ mundogeek
+
+El método groups, por su parte, devuelve una lista con todos los gru-
+pos, exceptuando el grupo 0, que se omite.
+
+.. code-block:: nim
+
+ >>> mo = re.match(“http://(.+)\(.{3})”, “http://mundogeek.
+ net”)
+ >>> print mo.groups()
+ (‘mundogeek’, ‘net’)
+
+La función search del módulo re funciona de forma similar a match; 
+contamos con los mismos parámetros y el mismo valor de retorno. 
+La única diferencia es que al utilizar match la cadena debe ajustarse al 
+patrón desde el primer carácter de la cadena, mientras que con search 
+buscamos cualquier parte de la cadena que se ajuste al patrón. Por esta 
+razón el método start de un objeto MatchObject obtenido mediante la 
+función match siempre devolverá 0, mientras que en el caso de search 
+esto no tiene por qué ser así.
+
+Otra función de búsqueda del módulo re es findall. Este toma los 
+mismos parámetros que las dos funciones anteriores, pero devuelve una 
+lista con las subcadenas que cumplieron el patrón.
+
+Otra posibilidad, si no queremos todas las coincidencias, es utilizar 
+finditer, que devuelve un iterador con el que consultar uno a uno los 
+distintos MatchObject.
+
+Las expresiones regulares no solo permiten realizar búsquedas o 
+comprobaciones, sino que, como comentamos anteriormente, también 
