@@ -3315,3 +3315,114 @@ distintos MatchObject.
 
 Las expresiones regulares no solo permiten realizar búsquedas o 
 comprobaciones, sino que, como comentamos anteriormente, también 
+tenemos funciones disponibles para dividir la cadena o realizar reem-
+plazos.
+
+La función split sin ir más lejos toma como parámetros un patrón, 
+una cadena y un entero opcional indicando el número máximo de 
+elementos en los que queremos dividir la cadena, y utiliza el patrón a 
+modo de puntos de separación para la cadena, devolviendo una lista 
+con las subcadenas.
+
+La función sub toma como parámetros un patrón a sustituir, una 
+cadena que usar como reemplazo cada vez que encontremos el patrón, 
+la cadena sobre la que realizar las sustituciones, y un entero opcional 
+indicando el número máximo de sustituciones que queremos realizar.
+Al llamar a estos métodos lo que ocurre en realidad es que se crea un 
+nuevo objeto de tipo RegexObject que representa la expresión regular, y 
+se llama a métodos de este objeto que tienen los mismos nombres que 
+las funciones del módulo.
+
+Si vamos a utilizar un mismo patrón varias veces nos puede interesar 
+crear un objeto de este tipo y llamar a sus métodos nosotros mismos; 
+de esta forma evitamos que el intérprete tenga que crear un nuevo 
+objeto cada vez que usemos el patrón y mejoraremos el rendimiento de 
+la aplicación.
+
+Para crear un objeto RegexObject se utiliza la función compile del 
+módulo, al que se le pasa como parámetro la cadena que representa el 
+patrón que queremos utilizar para nuestra expresión regular y, opcio-
+nalmente, una serie de flags de entre los que comentamos anterior-
+mente. 
+
+**soCkets**
+--------
+
+La comunicación entre distintas entidades en una red se basa en 
+Python en el clásico concepto de sockets. Los sockets son un concepto 
+abstracto con el que se designa al punto final de una conexión.
+
+Los programas utilizan sockets para comunicarse con otros programas, 
+que pueden estar situados en computadoras distintas.
+
+Un socket queda definido por la dirección IP de la máquina, el puerto 
+en el que escucha, y el protocolo que utiliza.
+
+Los tipos y funciones necesarios para trabajar con sockets se encuen-
+tran en Python en el módulo socket, como no podría ser de otra 
+forma.
+
+Los sockets se clasifican en sockets de flujo (socket.SOCK_STREAM) o 
+sockets de datagramas (socket.SOCK_DGRAM) dependiendo de si el ser-
+vicio utiliza TCP, que es orientado a conexión y fiable, o UDP, respec-
+tivamente. En este capítulo sólo cubriremos los sockets de flujo, que 
+cubren un 90% de las necesidades comunes.
+
+Los sockets también se pueden clasificar según la familia. Tenemos 
+sockets UNIX (socket.AF_UNIX) que se crearon antes de la concepción 
+de las redes y se basan en ficheros, sockets socket.AF_INET que son los 
+que nos interesan, sockets socket.AF_INET6 para IPv6, etc.
+
+Para crear un socket se utiliza el constructor socket.socket() que pue-
+de tomar como parámetros opcionales la familia, el tipo y el protocolo. 
+Por defecto se utiliza la familia AF_INET y el tipo SOCK_STREAM.
+
+Veremos durante el resto del capítulo cómo crear un par de programas 
+cliente y servidor a modo de ejemplo.
+Lo primero que tenemos que hacer es crear un objeto socket para el 
+servidor
+
+.. code-block:: nim
+
+ socket_s = socket.socket()
+
+Tenemos ahora que indicar en qué puerto se va a mantener a la escu-
+cha nuestro servidor utilizando el método bind. Para sockets IP, como 
+es nuestro caso, el argumento de bind es una tupla que contiene el 
+host y el puerto. El host se puede dejar vacío, indicando al método que 
+puede utilizar cualquier nombre que esté disponible.
+
+.. code-block:: nim
+
+ socket_s.bind((“localhost”, 9999))
+
+Por último utilizamos listen para hacer que el socket acepte conexio-
+nes entrantes y accept para comenzar a escuchar. El método listen 
+requiere de un parámetro que indica el número de conexiones máximas 
+que queremos aceptar; evidentemente, este valor debe ser al menos 1.
+
+El método accept se mantiene a la espera de conexiones entrantes, 
+bloqueando la ejecución hasta que llega un mensaje.
+
+Cuando llega un mensaje, accept desbloquea la ejecución, devolviendo 
+un objeto socket que representa la conexión del cliente y una tupla que 
+contiene el host y puerto de dicha conexión.
+
+.. code-block:: nim
+
+ socket_s.listen(10)
+ socket_c, (host_c, puerto_c) = socket_s.accept()
+
+Una vez que tenemos este objeto socket podemos comunicarnos con 
+el cliente a través suyo, mediante los métodos recv y send (o recvfrom 
+y sendfrom en UDP) que permiten recibir o enviar mensajes respec-
+tivamente. El método send toma como parámetros los datos a enviar, 
+mientras que el método recv toma como parámetro el número máxi-
+mo de bytes a aceptar.
+
+.. code-block:: nim
+
+ recibido = socket_c.recv(1024)
+ print “Recibido: “, recibio
+ socket_c.send(recibido)
+
