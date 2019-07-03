@@ -3470,3 +3470,85 @@ Y a continuación tenemos el del script cliente:
  import socket  
  s = socket.socket()  
  s.connect((“localhost”, 9999))  
+ while True:  
+     mensaje = raw_input(“> “)  
+     s.send(mensaje)  
+     mensaje == “quit”:  
+         break  
+ print “adios” 
+ s.close() 
+
+**interaCtuar Con webs**
+------
+
+Existen dos módulos principales para leer datos de URLs en Python: 
+urllib y urllib2. En esta lección aprenderemos a utilizar urllib2 
+ya que es mucho más completo, aunque urllib tiene funcionalidades 
+propias que no se pueden encontrar en urllib2, por lo que también lo 
+tocaremos de pasada.
+
+urllib2 puede leer datos de una URL usando varios protocolos como 
+HTTP, HTTPS, FTP, o Gopher.
+
+Se utiliza una función urlopen para crear un objeto parecido a un 
+fichero con el que leer de la URL. Este objeto cuenta con métodos 
+como read, readline, readlines y close, los cuales funcionan exac-
+tamente igual que en los objetos file, aunque en realidad estamos 
+trabajando con un wrapper que nos abstrae de un socket que se utiliza 
+por debajo.
+
+El método read, como recordareis, sirve para leer el “archivo” completo 
+o el número de bytes especificado como parámetro, readline para leer 
+una línea, y readlines para leer todas las líneas y devolver una lista con 
+ellas.
+
+También contamos con un par de métodos geturl, para obtener la 
+URL de la que estamos leyendo (que puede ser útil para comprobar si 
+ha habido una redirección) e info que nos devuelve un objeto con las 
+cabeceras de respuesta del servidor (a las que también se puede acceder 
+mediante el atributo headers).
+
+.. code-block:: nim
+
+ import urllib2
+ try:
+    f = urllib2.urlopen(“http://www.python.org”)
+    print f.read()
+    f.close()
+ except HTTPError, e:
+    print “Ocurrió un error”
+    print e.code
+ except URLError, e:
+    print “Ocurrió un error”
+    print e.reason
+
+Al trabajar con urllib2 nos podemos encontrar, como vemos, con 
+errores de tipo URLError. Si trabajamos con HTTP podemos encon-
+trarnos también con errores de la subclase de URLError HTTPError, que 
+se lanzan cuando el servidor devuelve un código de error HTTP, como 
+el error 404 cuando no se encuentra el recurso. También podríamos 
+encontrarnos con errores lanzados por la librería que urllib2 utiliza 
+por debajo para las transferencias HTTP: httplib; o con excepciones 
+lanzadas por el propio módulo socket.
+
+La función urlopen cuenta con un parámetro opcional data con el que 
+poder enviar información a direcciones HTTP (y solo HTTP) usando 
+POST (los parámetros se envían en la propia petición), por ejemplo 
+para responder a un formulario. Este parámetro es una cadena codifi-
+cada adecuadamente, siguiendo el formato utilizado en las URLs:
+
+‘password=contrase%A4a&usuario=manuel’
+Lo más sencillo para codificar la cadena es utilizar el método urlen-
+code de urllib, que acepta un diccionario o una lista de tuplas (clave, 
+valor) y genera la cadena codificada correspondiente:
+
+.. code-block:: nim
+
+ import urllib, urllib2
+ params = urllib.urlencode({“usuario”: “manuel”,
+                           “password”: “contraseña”})
+ f = urllib2.urlopen(“http://ejemplo.com/login”, params)
+ 
+Si lo único que queremos hacer es descargar el contenido de una URL 
+a un archivo local, podemos utilizar la función urlretrieve de urllib 
+en lugar de leer de un objeto creado con urlopen y escribir los datos 
