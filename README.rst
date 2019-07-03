@@ -3426,3 +3426,47 @@ mo de bytes a aceptar.
  print “Recibido: “, recibio
  socket_c.send(recibido)
 
+Una vez que hemos terminado de trabajar con el socket, lo cerramos 
+con el método close.
+
+Crear un cliente es aún más sencillo. Solo tenemos que crear el objeto 
+socket, utilizar el método connect para conectarnos al servidor y uti-
+lizar los métodos send y recv que vimos anteriormente. El argumento 
+de connect es una tupla con host y puerto, exactamente igual que bind.
+
+.. code-block:: nim
+
+ socket_c = socket.socket()
+ socket_c.connect((“localhost”, 9999))
+ socket_c.send(“hola”)
+
+Veamos por último un ejemplo completo. En este ejemplo el cliente 
+manda al servidor cualquier mensaje que escriba el usuario y el servi-
+dor no hace más que repetir el mensaje recibido. La ejecución termina 
+cuando el usuario escribe quit.
+Este sería el código del script servidor:
+
+.. code-block:: nim
+
+ import socket
+ s = socket.socket()
+ s.bind((“localhost”, 9999))
+ s.listen(1)
+ sc, addr = s.accept()
+ while True:
+      recibido = sc.recv(1024)
+      if recibido == “quit”:
+         break
+      print “Recibido:”, recibido
+      sc.send(recibido)
+ print “adios”
+ sc.close()
+ s.close()
+
+Y a continuación tenemos el del script cliente:
+
+.. code-block:: nim
+
+ import socket  
+ s = socket.socket()  
+ s.connect((“localhost”, 9999))  
