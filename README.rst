@@ -3186,3 +3186,46 @@ símbolo ‘^’. La expresión “python[^0-9a-z]”, por ejemplo, indicaría
 que nos interesan las cadenas que comiencen por “python” y tengan 
 como último carácter algo que no sea ni una letra minúscula ni un 
 número.
+
+.. code-block:: nim
+
+ re.match(“python[^0-9a-z]”, “python+”)
+
+El uso de [0-9] para referirse a un dígito no es muy común, ya que, al 
+ser la comprobación de que un carácter es un dígito algo muy utilizado, 
+existe una secuencia especial equivalente: ‘\d’. Existen otras secuen-
+cias disponibles que listamos a continuación:
+
+.. code-block:: nim
+
+ “\d”: un dígito. Equivale a [0-9]
+ “\D”: cualquier carácter que no sea un dígito. Equivale a [^0-9]
+ “\w”: cualquier caracter alfanumérico. Equivale a [a-zA-Z0-9_]
+ “\W”: cualquier carácter no alfanumérico. Equivale a [^a-zA-
+ Z0-9_]
+ “\s”: cualquier carácter en blanco. Equivale a [ \t\n\r\f\v]
+ “\S”: cualquier carácter que no sea un espacio en blanco. Equivale 
+ a [^ \t\n\r\f\v]
+
+Veamos ahora cómo representar repeticiones de caracteres, dado que 
+no sería de mucha utilidad tener que, por ejemplo, escribir una expre-
+sión regular con 30 caracteres ‘\d’ para buscar números de 30 dígitos. 
+Para este menester tenemos los caracteres especiales +, * y ?, además de 
+las llaves {}.
+
+El carácter + indica que lo que tenemos a la izquierda, sea un carác-
+ter como ‘a’, una clase como ‘[abc]’ o un subpatrón como (abc), 
+puede encontrarse una o mas veces. Por ejemplo la expresión regular 
+“python+” describiría las cadenas “python”, “pythonn” y “pythonnn”, 
+pero no “pytho”, ya que debe haber al menos una n.
+
+El carácter * es similar a +, pero en este caso lo que se sitúa a su iz-
+quierda puede encontrarse cero o mas veces.
+
+El carácter ? indica opcionalidad, es decir, lo que tenemos a la izquier-
+da puede o no aparecer (puede aparecer 0 o 1 veces).
+
+Finalmente las llaves sirven para indicar el número de veces exacto que 
+puede aparecer el carácter de la izquierda, o bien un rango de veces que 
+puede aparecer. Por ejemplo {3} indicaría que tiene que aparecer exac-
+tamente 3 veces, {3,8} indicaría que tiene que aparecer de 3 a 8 veces, 
