@@ -3548,7 +3548,223 @@ valor) y genera la cadena codificada correspondiente:
  params = urllib.urlencode({“usuario”: “manuel”,
                            “password”: “contraseña”})
  f = urllib2.urlopen(“http://ejemplo.com/login”, params)
- 
+
 Si lo único que queremos hacer es descargar el contenido de una URL 
 a un archivo local, podemos utilizar la función urlretrieve de urllib 
 en lugar de leer de un objeto creado con urlopen y escribir los datos 
+leídos.
+
+La función urlretrieve toma como parámetros la URL a descar-
+gar y, opcionalmente, un parámetro filename con la ruta local en la 
+que guardar el archivo, un parámetro data similar al de urlopen y un 
+parámetro reporthook con una función que utilizar para informar del 
+progreso.
+
+A excepción de las ocasiones en las que se utiliza el parámetro data 
+las conexiones siempre se realizan utilizando GET (los parámetros se 
+envían en la URL). Para enviar datos usando GET basta con concate-
+nar la cadena resultante de urlencode con la URL a la que nos vamos a 
+conectar mediante el símbolo ?.
+
+.. code-block:: nim
+
+ params = urllib.urlencode({“usuario”: “manuel”,
+                           “password”: “contraseña”})
+ f = urllib2.urlopen(“http://ejemplo.com/login” +
+                    “?” + params)
+
+En urllib también se utiliza una función urlopen para crear nuestros 
+pseudo-archivos, pero a diferencia de la versión de urllib, la función 
+urlopen de urllib2 también puede tomar como parámetro un objeto 
+Request, en lugar de la URL y los datos a enviar.
+
+La clase Request define objetos que encapsulan toda la información 
+relativa a una petición. A través de este objeto podemos realizar peti-
+ciones más complejas, añadiendo nuestras propias cabeceras, como el 
+User-Agent.
+
+El constructor más sencillo para el objeto Request no toma más que 
+una cadena indicando la URL a la que conectarse, por lo que utilizar 
+este objeto como parámetro de urlopen sería equivalente a utilizar una 
+cadena con la URL directamente.
+
+Sin embargo el constructor de Request también tiene como paráme-
+tros opcionales una cadena data para mandar datos por POST y un 
+diccionario headers con las cabeceras (además de un par de campos 
+origin_req_host y unverifiable, que quedan fuera del propósito del 
+capítulo por ser de raro uso).
+
+Veamos cómo añadir nuestras propias cabeceras utilizando como 
+ejemplo la cabecera User-Agent. El User-Agent es una cabecera que 
+sirve para identificar el navegador y sistema operativo que estamos 
+utilizando para conectarnos a esa URL. Por defecto urllib2 se identi-
+fica como “Python-urllib/2.5”; si quisiéramos identificarnos como un 
+Linux corriendo Konqueror por ejemplo, usaríamos un código similar 
+al siguiente:
+
+.. code-block:: nim
+
+ ua = “Mozilla/5.0 (compatible; Konqueror/3.5.8; Linux)”
+ h = {“User-Agent”: ua}
+ r = urllib2.Request(“http://www.python.org”, headers=h)
+ f = urllib2.urlopen(r)
+ print f.read()
+
+Para personalizar la forma en que trabaja urllib2 podemos instalar un 
+grupo de manejadores (handlers) agrupados en un objeto de la clase 
+OpenerDirector (opener o abridor), que será el que se utilice a partir de 
+ese momento al llamar a urlopen.
+
+Para construir un opener se utiliza la función build_opener a la que se 
+le pasa los manejadores que formarán parte del opener. El opener se 
+encargará de encadenar la ejecución de los distintos manejadores en el 
+orden dado. También se puede usar el constructor de OpenerDirector, 
+y añadir los manejadores usando su método add_handler.
+
+Para instalar el opener una vez creado se utiliza la función ins-
+tall_opener, que toma como parámetro el opener a instalar. También 
+se podría, si sólo queremos abrir la URL con ese opener una sola vez, 
+utilizar el método open del opener.
+
+urllib2 cuenta con handlers que se encargan de manejar los esquemas 
+disponibles (HTTP, HTTPS, FTP), manejar la autenticación, manejar 
+las redirecciones, etc.
+
+Para añadir autenticación tendríamos que instalar un opener que in-
+cluyera como manejador HTTPBasicAuthHandler, ProxyBasicAuthHan-
+dler, HTTPDigestAuthHandler y/o ProxyDigestAuthHandler.
+
+Para utilizar autenticación HTTP básica, por ejemplo, usaríamos 
+HTTPBasicAuthHandler:
+
+.. code-block:: nim
+
+ aut_h = urllib2.HTTPBasicAuthHandler()
+ aut_h.add_password(“realm”, “host”, “usuario”, “password”)
+ opener = urllib2.build_opener(aut_h)
+ urllib2.install_opener(opener)
+ f = urllib2.urlopen(“http://www.python.org”)
+
+Si quisiéramos especificar un proxy en el código tendríamos que 
+utilizar un opener que contuviera el manejador ProxyHandler. El 
+manejador por defecto incluye una instacia de ProxyHandler construi-
+do llamando al inicializador sin parámetros, con lo que se lee la lista 
+de proxies a utilizar de la variable de entorno adecuada. Sin embargo 
+también podemos construir un ProxyHandler pasando como paráme-
+tro al inicializador un diccionario cuyas claves son los protocolos y los 
+valores, la URL del proxy a utilizar para dicho protocolo.
+
+.. code-block:: nim
+
+ proxy_h = urllib2.ProxyHandler({“http” : “http://miproxy.
+ net:123”})
+ opener = urllib2.build_opener(proxy_h)
+ urllib2.install_opener(opener)
+ f = urllib2.urlopen(“http://www.python.org”)
+
+Para que se guarden las cookies que manda HTTP utilizamos el ma-
+nejador HTTPCookieProcessor.
+
+.. code-block:: nim
+
+ cookie_h = urllib2.HTTPCookieProcessor()
+ opener = urllib2.build_opener(cookie_h)
+ urllib2.install_opener(opener)
+ f = urllib2.urlopen(“http://www.python.org”)
+
+Si queremos acceder a estas cookies o poder mandar nuestras propias 
+cookies, podemos pasarle como parámetro al inicializador de HTTPCoo-
+kieProcessor un objeto de tipo CookieJar del módulo cookielib.
+
+Para leer las cookies mandadas basta crear un objeto iterable a partir 
+del CookieJar (también podríamos buscar las cabeceras correspondien-
+tes, pero este sistema es más claro y sencillo):
+
+.. code-block:: nim
+
+ import urllib2, cookielib
+ cookie_j = cookielib.CookieJar()
+ cookie_h = urllib2.HTTPCookieProcessor(cookie_j)
+ opener = urllib2.build_opener(cookie_h)
+ opener.open(“http://www.python.org”)
+ for num, cookie in enumerate(cookie_j):
+    print num, cookie.name
+    print cookie.value
+    print
+
+En el improbable caso de que necesitáramos añadir una cookie an-
+tes de realizar la conexión, en lugar de conectarnos para que el sitio 
+la mande, podríamos utilizar el método set_cookie de CookieJar, al 
+que le pasamos un objeto de tipo Cookie. El constructor de Cookie, no 
+obstante, es bastante complicado.
+
+**¿Qué son los procesos y los threads?**
+---------
+
+Las computadoras serían mucho menos útiles si no pudiéramos hacer 
+más de una cosa a la vez. Si no pudiéramos, por ejemplo, escuchar 
+música en nuestro reproductor de audio favorito mientras leemos un 
+tutorial de Python en Mundo Geek.
+
+Pero, ¿cómo se conseguía esto en computadoras antiguas con un solo 
+núcleo / una sola CPU? Lo que ocurría, y lo que ocurre ahora, es que 
+en realidad no estamos ejecutando varios procesos a la vez (se llama 
+proceso a un programa en ejecución), sino que los procesos se van tur-
+nando y, dada la velocidad a la que ejecutan las instrucciones, nosotros 
+tenemos la impresión de que las tareas se ejecutan de forma paralela 
+como si tuviéramos multitarea real.
+
+Cada vez que un proceso distinto pasa a ejecutarse es necesario reali-
+zar lo que se llama un cambio de contexto, durante el cual se salva el 
+estado del programa que se estaba ejecutando a memoria y se carga el 
+estado del programa que va a entrar a ejecutarse.
+
+En Python podemos crear nuevos procesos mediante la función os.
+fork, que ejecuta la llamada al sistema fork, o mediante otras funcio-
+nes más avanzadas como popen2.popen2, de forma que nuestro progra-
+ma pueda realizar varias tareas de forma paralela.
+
+Sin embargo el cambio de contexto puede ser relativamente lento, y 
+los recursos necesarios para mantener el estado demasiados, por lo que 
+a menudo es mucho más eficaz utilizar lo que se conoce como threads, 
+hilos de ejecución, o procesos ligeros.
+
+Los threads son un concepto similar a los procesos: también se trata de 
+código en ejecución. Sin embargo los threads se ejecutan dentro de un 
+proceso, y los threads del proceso comparten recursos entre si, como la 
+memoria, por ejemplo.
+
+El sistema operativo necesita menos recursos para crear y gestionar los 
+threads, y al compartir recursos, el cambio de contexto es más rápido. 
+Además, dado que los threads comparten el mismo espacio de me-
+moria global, es sencillo compartir información entre ellos: cualquier 
+variable global que tengamos en nuestro programa es vista por todos 
+los threads.
+
+**El GIL**
+----------
+
+La ejecución de los threads en Python está controlada por el GIL 
+(Global Interpreter Lock) de forma que sólo un thread puede ejecutar-
+se a la vez, independientemente del número de procesadores con el que 
+cuente la máquina. Esto posibilita que el escribir extensiones en C para 
+Python sea mucho más sencillo, pero tiene la desventaja de limitar mu-
+cho el rendimiento, por lo que a pesar de todo, en Python, en ocasiones 
+nos puede interesar más utilizar procesos que threads, que no sufren de 
+esta limitación.
+
+Cada cierto número de instrucciones de bytecode la máquina virtual 
+para la ejecución del thread y elige otro de entre los que estaban espe-
+rando.
+
+Por defecto el cambio de thread se realiza cada 10 instrucciones de 
+bytecode, aunque se puede modificar mediante la función sys.set-
+checkinterval. También se cambia de thread cuando el hilo se pone a 
+dormir con time.sleep o cuando comienza una operación de entrada/
+salida, las cuales pueden tardar mucho en finalizar, y por lo tanto, de no 
+realizar el cambio, tendríamos a la CPU demasiado tiempo sin trabajar 
+esperando a que la operación de E/S terminara.
+
+Para minimizar un poco el efecto del GIL en el rendimiento de nues-
+tra aplicación es conveniente llamar al intérprete con el flag -O, lo que 
+hará que se genere un bytecode optimizado con menos instrucciones, y,
