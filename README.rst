@@ -3768,3 +3768,46 @@ esperando a que la operación de E/S terminara.
 Para minimizar un poco el efecto del GIL en el rendimiento de nues-
 tra aplicación es conveniente llamar al intérprete con el flag -O, lo que 
 hará que se genere un bytecode optimizado con menos instrucciones, y,
+por lo tanto, menos cambios de contexto. También podemos plantear-
+nos el utilizar procesos en lugar de threads, como ya comentamos, uti-
+lizando por ejemplo el módulo processing; escribir el código en el que 
+el rendimiento sea crítico en una extensión en C o utilizar IronPython 
+o Jython, que carecen de GIL.
+
+**Threads en Python**
+
+El trabajo con threads se lleva a cabo en Python mediante el módulo 
+thread. Este módulo es opcional y dependiente de la plataforma, y 
+puede ser necesario, aunque no es común, recompilar el intérprete para 
+añadir el soporte de threads.
+
+Además de thread, también contamos con el módulo threading que se 
+apoya en el primero para proporcionarnos una API de más alto nivel, 
+más completa, y orientada a objetos. El módulo threading se basa 
+ligeramente en el modelo de threads de Java.
+
+El módulo threading contiene una clase Thread que debemos ex-
+tender para crear nuestros propios hilos de ejecución. El método run 
+contendrá el código que queremos que ejecute el thread. Si queremos 
+especificar nuestro propio constructor, este deberá llamar a threading.
+Thread.__init__(self) para inicializar el objeto correctamente.
+
+.. code-block:: nim
+
+ import threading
+ class MiThread(threading.Thread):
+      def __init__(self, num):
+          threading.Thread.__init__(self)
+          self.num = num
+      def run(self):
+          print “Soy el hilo”, self.num
+
+Para que el thread comience a ejecutar su código basta con crear una 
+instancia de la clase que acabamos de definir y llamar a su método 
+start. El código del hilo principal y el del que acabamos de crear se 
+ejecutarán de forma concurrente.
+
+.. code-block:: nim
+
+ print “Soy el hilo principal”
+ for i in range(0, 10):
