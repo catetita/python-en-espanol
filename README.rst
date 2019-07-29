@@ -3811,3 +3811,99 @@ ejecutarán de forma concurrente.
 
  print “Soy el hilo principal”
  for i in range(0, 10):
+ t = MiThread(i)
+ t.start()
+ t.join()
+
+El método join se utiliza para que el hilo que ejecuta la llamada se
+bloquee hasta que finalice el thread sobre el que se llama. En este caso
+se utiliza para que el hilo principal no termine su ejecución antes que
+los hijos, lo cuál podría resultar en algunas plataformas en la terminación de los hijos antes de finalizar su ejecución. El método join puede
+tomar como parámetro un número en coma flotante indicando el
+número máximo de segundos a esperar.
+
+Si se intenta llamar al método start para una instancia que ya se está
+ejecutando, obtendremos una excepción.
+
+La forma recomendada de crear nuevos hilos de ejecución consiste en
+extender la clase Thread, como hemos visto, aunque también es posible
+crear una instancia de Thread directamente, e indicar como parámetros
+del constructor una clase ejecutable (una clase con el método especial
+__call__) o una función a ejecutar, y los argumentos en una tupla
+(parámetro args) o un diccionario (parámetro kwargs).
+
+.. code-block:: nim
+
+ import threading
+ def imprime(num):
+ print “Soy el hilo”, num
+ print “Soy el hilo principal”
+ for i in range(0, 10):
+ t = threading.Thread(target=imprime, args=(i, ))
+ t.start()
+
+Además de los parámetros target, args y kwargs también podemos
+pasar al constructor un parámetro de tipo cadena name con el nombre que queremos que tome el thread (el thread tendrá un nombre
+predeterminado aunque no lo especifiquemos); un parámetro de tipo
+booleano verbose para indicar al módulo que imprima mensajes sobre
+el estado de los threads para la depuración y un parámetro group, que
+por ahora no admite ningún valor pero que en el futuro se utilizará
+para crear grupos de threads y poder trabajar a nivel de grupos.
+
+Para comprobar si un thread sigue ejecutándose, se puede utilizar el
+método isAlive. También podemos asignar un nombre al hilo y consultar su nombre con los métodos setName y getName, 
+respectivamente.
+
+Mediante la función threading.enumerate obtendremos una lista de
+los objetos Thread que se están ejecutando, incluyendo el hilo principal
+(podemos comparar el objeto Thread con la variable main_thread para
+comprobar si se trata del hilo principal) y con threading.activeCount
+podemos consultar el número de threads ejecutándose.
+
+Los objetos Thread también cuentan con un método setDaemon que
+toma un valor booleano indicando si se trata de un demonio.
+La utilidad de esto es que si solo quedan threads de tipo demonio ejecutándose, la aplicación terminará automáticamente, 
+terminando estos threads de forma segura.
+
+Por último tenemos en el módulo threading una clase Timer que hereda de Thread y cuya utilidad es la de ejecutar el código de su método
+run después de un periodo de tiempo indicado como parámetro en
+su constructor. También incluye un método cancel mediante el que
+cancelar la ejecución antes de que termine el periodo de espera.
+
+**Sincronización**
+
+Uno de los mayores problemas a los que tenemos que enfrentarnos al
+utilizar threads es la necesidad de sincronizar el acceso a ciertos recursos por parte de los threads. Entre los mecanismos de sincronización
+que tenemos disponibles en el módulo threading se encuentran los
+locks, locks reentrantes, semáforos, condiciones y eventos.
+
+Los locks, también llamados mutex (de mutual exclusion), cierres
+de exclusión mutua, cierres o candados, son objetos con dos estados
+posibles: adquirido o libre. Cuando un thread adquiere el candado, los
+demás threads que lleguen a ese punto posteriormente y pidan adquirirlo se bloquearán hasta que el thread que lo ha adquirido libere el
+candado, momento en el cuál podrá entrar otro thread.
+
+El candado se representa mediante la clase Lock. Para adquirir el candado se utiliza el método acquire del objeto, al que se le puede
+pasar un booleano para indicar si queremos esperar a que se libere
+(True) o no (False). Si indicamos que no queremos esperar, el método
+devolverá True o False dependiendo de si se adquirió o no el candado,
+respectivamente. Por defecto, si no se indica nada, el hilo se bloquea
+indefinidamente.
+
+Para liberar el candado una vez hemos terminado de ejecutar el bloque
+de código en el que pudiera producirse un problema de concurrencia,
+se utiliza el método release.
+
+.. code-block:: nim
+
+ lista = []
+ lock = threading.Lock()
+ def anyadir(obj):
+ lock.acquire()
+ lista.append(obj)
+ lock.release()
+ def obtener():
+ lock.acquire()
+ obj = lista.pop()
+ lock.release()
+ return obj
